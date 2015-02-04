@@ -229,7 +229,6 @@ public class MainFragment extends ServiceFragmentBase {
             ++mDumbCount;
             mViewHolder.getRippleTextView().setTextRipple(String.valueOf(mDumbCount));
             final DumbModel model=new DumbModel();
-            text=Utils.buildDumbContent(text);
             model.setContent(text);
             final Message msg=Message.obtain(null, DataServiceMessages.Service_Add_Item, -1, -1, model);
             sendMessageToService(msg);

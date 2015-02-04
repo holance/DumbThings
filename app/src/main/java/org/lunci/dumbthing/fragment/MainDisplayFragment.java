@@ -312,7 +312,7 @@ public class MainDisplayFragment extends ServiceFragmentBase {
                         @Override
                         public void run() {
                             try {
-                                Utils.shareText(getActivity(), model.getContent());
+                                Utils.shareText(getActivity(), Utils.buildDumbContent(model.getContent()));
                                 mShareButton.setEnabled(true);
                             } catch (IndexOutOfBoundsException ex) {
                                 ex.printStackTrace();

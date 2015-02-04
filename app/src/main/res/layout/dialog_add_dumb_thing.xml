@@ -15,12 +15,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dialog_content_margin"
-            style="@style/TextAppearance.AppCompat.Body1"
-            android:inputType="textCapSentences|textAutoCorrect"
-            android:maxLines="4"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:inputType="textShortMessage|textAutoCorrect|textMultiLine"
             android:hint="@string/what_dumb_thing"
             android:autoText="true"
-            android:imeOptions="actionDone">
+            android:elegantTextHeight="true"
+            android:imeOptions="actionDone"
+            android:textIsSelectable="true"
+            android:maxLines="5">
             <requestFocus />
          </EditText>
     </LinearLayout>

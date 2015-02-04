@@ -26,6 +26,7 @@
     <string name="about">About</string>
 
     <!--Settings-->
+    <string name="share">Share</string>
     <string name="general">General</string>
     <string name="preference_enable_prefix">Enable Auto Prefix.</string>
     <string name="preference_enable_prefix_summary">Append prefix automatically at front.</string>
