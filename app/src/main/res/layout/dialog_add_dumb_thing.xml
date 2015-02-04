@@ -16,12 +16,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dialog_content_margin"
             style="@style/TextAppearance.AppCompat.Medium"
-            android:inputType="textShortMessage|textAutoCorrect|textMultiLine"
+            android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
             android:hint="@string/what_dumb_thing"
             android:autoText="true"
             android:elegantTextHeight="true"
             android:imeOptions="actionDone"
-            android:textIsSelectable="true"
+            android:textIsSelectable="false"
             android:maxLines="5">
             <requestFocus />
          </EditText>

@@ -130,13 +130,14 @@ public class MainDisplayFragment extends ServiceFragmentBase {
 
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                if(e1==null || e2==null)return false;
                 final float distanceX = e1.getRawX() - e2.getRawX();
                 if (distanceX < -ThresholdDistance && velocityX > ThresholdVelocity) {
                     return mViewHolder.showPrevious();
                 } else if (distanceX > ThresholdDistance && velocityX < -ThresholdVelocity) {
                     return mViewHolder.showNext();
                 }
-                return false;
+                return true;
             }
         });
         if(savedInstanceState!=null){

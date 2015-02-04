@@ -38,6 +38,7 @@ import org.lunci.dumbthing.dataModel.DumbModel;
 import org.lunci.dumbthing.dataModel.GlobalMessages;
 import org.lunci.dumbthing.service.DataServiceMessages;
 import org.lunci.dumbthing.util.DateTimeHelper;
+import org.lunci.dumbthing.util.Utils;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -178,6 +179,7 @@ public class ItemListFragment extends ServiceFragmentBase implements AbsListView
         if (BuildConfig.DEBUG) {
             Log.i(TAG, "onItemClick, position=" + position);
         }
+        Utils.shareText(getActivity(), Utils.buildDumbContent(mAdapter.getItem(position).getContent()));
     }
 
     @Override
