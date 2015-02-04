@@ -32,5 +32,8 @@
         android:layout_gravity="center_vertical"
         android:ellipsize="marquee"
         android:text="Dumb Things"
-        android:textColor="@color/abc_primary_text_material_dark" />
+        android:textColor="@color/abc_primary_text_material_dark"
+        android:elegantTextHeight="true"
+        android:linksClickable="true"
+        android:textIsSelectable="true" />
 </LinearLayout>
