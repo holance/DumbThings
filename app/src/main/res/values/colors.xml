@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="transparent">#00FFFFFF</color>
+    <!--Blue-->
+    <color name="blue_900">#0D47A1</color>
+    <color name="blue_700">#1976D2</color>
+    <color name="blue_500">#2196F3</color>
+    <color name="blue_100">#BBDEFB</color>
+    <color name="blue_300">#64B5F6</color>
+    
+    <!--indigo-->
+    <color name="indigo_300">#7986CB</color>
+    <color name="indigo_500">#3F51B5</color>
+    <color name="indigo_700">#303F9F</color>
+    <color name="indigo_900">#1A237E</color>
+    <!--red-->
+    <color name="red_700">#D32F2F</color>
+    <color name="red_500">#F44336</color>
+    <color name="red_400">#EF5350</color>
+    <color name="red_100">#FFCDD2</color>
+    <color name="red_300">#E57373</color>
+    <!--deep purple-->
+    <color name="deep_purple_500">#673AB7</color>
+
+    <!--grey-->
+    <color name="grey_500">#9E9E9E</color>
+    
+    <!--green-->
+    <color name="green_300">#81C784</color>
+    <color name="green_500">#4CAF50</color>
+    <color name="green_700">#388E3C</color>
+    
+    <!--deep orange-->
+    <color name="deep_orange_500">#FF5722</color>
+</resources>

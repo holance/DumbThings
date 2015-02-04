@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2015 Lunci Hua
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipeLayout_root"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    xmlns:res="http://schemas.android.com/apk/res-auto">
+    <!-- Bottom View Start-->
+
+    <LinearLayout
+        android:background="@color/red_700"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <org.lunci.dumbthing.ui.RippleViewFrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            res:rv_type="doubleRipple"
+            res:rv_centered="true"
+            res:rv_rippleDuration="200"
+            android:visibility="gone">
+            <ImageButton
+                android:id="@+id/imageButton_edit"
+                android:background="@color/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:src="@drawable/ic_edit"
+                android:scaleType="center"/>
+        </org.lunci.dumbthing.ui.RippleViewFrameLayout>
+        <View android:layout_width="1dp" android:layout_height="match_parent"
+            android:background="@color/blue_900"></View>
+        <org.lunci.dumbthing.ui.RippleViewFrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            res:rv_type="simpleRipple"
+            res:rv_centered="true"
+            res:rv_rippleDuration="200">
+            <ImageButton
+                android:id="@+id/imageButton_delete"
+                android:background="@color/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:src="@drawable/ic_delete"
+                android:scaleType="center"/>
+        </org.lunci.dumbthing.ui.RippleViewFrameLayout>
+    </LinearLayout>
+
+    <!-- Bottom View End-->
+
+    <!-- Surface View Start -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/textView_counter_padding"
+        android:background="@color/indigo_900">
+        <TextView
+            android:id="@+id/textView_datetime"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:text="2015/3/3 18:33:22"
+            android:textColor="@color/deep_orange_500"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/textView_content"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:ellipsize="end"
+            android:text="Dumb Things"
+            android:textColor="@color/abc_primary_text_material_dark" />
+    </LinearLayout>
+
+    <!-- Surface View End -->
+</com.daimajia.swipe.SwipeLayout>

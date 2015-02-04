@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="button_add_padding">70dp</dimen>
+    <dimen name="textView_counter_padding">40dp</dimen>
+    <dimen name="textView_counter_margin">55dp</dimen>
+    <dimen name="material_dialog_button_min_width">600dp</dimen>
+    <dimen name="button_add_margin">25dp</dimen>
+</resources>

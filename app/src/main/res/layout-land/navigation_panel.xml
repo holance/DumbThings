@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2015 Lunci Hua
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<org.lunci.dumbthing.ui.MaterialRippleLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:res="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    res:rippleDuration="500"
+    res:rippleRoundedCorners="5dp"
+    res:rippleHover="false"
+    res:rippleFadeDuration="300"
+    res:rippleDimension="40dp"
+    res:ripplePersistent="false">
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:paddingBottom="@dimen/textView_counter_padding">
+        <org.lunci.dumbthing.ui.RippleView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            res:rv_centered="true">
+            <ImageButton
+                android:id="@+id/textView_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_share"
+                android:padding="@dimen/textView_counter_padding"
+                android:background="@color/transparent" />
+        </org.lunci.dumbthing.ui.RippleView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="4">
+            <ImageView
+                android:id="@+id/imageView_left_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_left"/>
+            <AdapterViewFlipper
+                android:id="@+id/adapterViewFlipper_last_item"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent">
+            </AdapterViewFlipper>
+            <ImageView
+                android:id="@+id/imageView_right_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_right"/>
+        </LinearLayout>
+    </LinearLayout>
+</org.lunci.dumbthing.ui.MaterialRippleLayout>
