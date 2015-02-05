@@ -226,6 +226,9 @@ public class MainFragment extends ServiceFragmentBase {
     private final class AddDumbThingCallbacksHandler implements AddDumbThingDialog.AddDumbThingDialogCallbacks{
         @Override
         public void onConfirmed(String text) {
+            if(text==null || text.isEmpty()){
+                return;
+            }
             ++mDumbCount;
             mViewHolder.getRippleTextView().setTextRipple(String.valueOf(mDumbCount));
             final DumbModel model=new DumbModel();
