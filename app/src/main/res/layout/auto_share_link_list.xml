@@ -16,52 +16,23 @@
   -->
 
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="wrap_content"
-    xmlns:res="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
     android:id="@+id/tableLayout_link_share"
     android:layout_height="wrap_content"
     android:gravity="center"
     android:padding="10dp"
     android:shrinkColumns="0,1">
     <TableRow android:gravity="center">
-        <org.lunci.dumbthing.ui.SquareRippleImageViewByWidth
-            android:id="@+id/imageView_link_facebook"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_facebook"
-            android:background="@drawable/circle_facebook"
-            android:layout_margin="10dp"
-            android:padding="10dp"
-            android:elevation="4dp"
-            res:rv_centered="true"/>
-        <org.lunci.dumbthing.ui.SquareRippleImageViewByWidth
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_facebook"
-            android:background="@drawable/circle_facebook"
-            android:layout_margin="10dp"
-            android:padding="10dp"
-            android:elevation="4dp"
-            res:rv_centered="true"/>
+        <include layout="@layout/link_share_button"
+            android:id="@+id/link_facebook_layout"></include>
+        <include layout="@layout/link_share_button"
+            android:id="@+id/link_twitter_layout"></include>
     </TableRow>
     <TableRow android:gravity="center">
-        <org.lunci.dumbthing.ui.SquareRippleImageViewByWidth
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_facebook"
-            android:background="@drawable/circle_facebook"
-            android:layout_margin="10dp"
-            android:padding="10dp"
-            android:elevation="4dp"
-            res:rv_centered="true"/>
-        <org.lunci.dumbthing.ui.SquareRippleImageViewByWidth
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_facebook"
-            android:background="@drawable/circle_facebook"
-            android:layout_margin="10dp"
-            android:padding="10dp"
-            android:elevation="4dp"
-            res:rv_centered="true"/>
+        <include layout="@layout/link_share_button"
+            android:id="@+id/link_google_layout"></include>
+        <include layout="@layout/link_share_button"
+            android:id="@+id/link_linkedin_layout"></include>
     </TableRow>
 </TableLayout>

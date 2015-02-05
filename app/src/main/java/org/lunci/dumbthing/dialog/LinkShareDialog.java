@@ -113,10 +113,51 @@ public class LinkShareDialog extends DialogFragment {
         uiHelper.onSaveInstanceState(outState);
     }
     
+    private class LinkButtonLayout{
+        public View getRoot() {
+            return mRoot;
+        }
+
+        public View getButton() {
+            return mButton;
+        }
+
+        public View getIndicator() {
+            return mIndicator;
+        }
+
+        private View mRoot;
+        private View mButton;
+        private View mIndicator;
+        
+        public void init(View root){
+            mRoot=root;
+            mButton=root.findViewById(R.id.imageView_link);
+            mIndicator=root.findViewById(R.id.imageView_linked_indicator);
+        }
+    }
+    
     private class LinkAccountManager{
-        private View mFacebookButton;
-        private View mTwitterButton;
-        private View mGooglePlusButton;
+        public LinkButtonLayout getFacebookButton() {
+            return mFacebookButton;
+        }
+
+        public LinkButtonLayout getTwitterButton() {
+            return mTwitterButton;
+        }
+
+        public LinkButtonLayout getGooglePlusButton() {
+            return mGooglePlusButton;
+        }
+
+        public LinkButtonLayout getLinkedInButton() {
+            return mLinkedInButton;
+        }
+
+        private final LinkButtonLayout mFacebookButton=new LinkButtonLayout();
+        private final LinkButtonLayout mTwitterButton=new LinkButtonLayout();
+        private final LinkButtonLayout mGooglePlusButton=new LinkButtonLayout();
+        private final LinkButtonLayout mLinkedInButton=new LinkButtonLayout();
         
         public LinkAccountManager(){
 
@@ -124,11 +165,22 @@ public class LinkShareDialog extends DialogFragment {
         }
         
         public void setupButtons(View view){
-            mFacebookButton=view.findViewById(R.id.imageView_link_facebook);
-            mFacebookButton.setOnClickListener(new View.OnClickListener() {
+            mFacebookButton.init(view.findViewById(R.id.link_facebook_layout));
+            mTwitterButton.init(view.findViewById(R.id.link_twitter_layout));
+            mGooglePlusButton.init(view.findViewById(R.id.link_google_layout));
+            mLinkedInButton.init(view.findViewById(R.id.link_linkedin_layout));
+            
+            if(Session.getActiveSession()==null || Session.getActiveSession().isClosed()){
+                mFacebookButton.getIndicator().setVisibility(View.INVISIBLE);
+            }
+            mFacebookButton.getButton().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    linkFacebook();
+                   if(Session.getActiveSession()==null || Session.getActiveSession().isClosed()) {
+                       linkFacebook();
+                   }else{
+                       unlinkFacebook();
+                   }
                 }
             });
         }
@@ -139,6 +191,10 @@ public class LinkShareDialog extends DialogFragment {
             button.setPublishPermissions(Arrays.asList("publish_actions"));
             button.performClick();
         }
+        
+        private void unlinkFacebook(){
+            Session.getActiveSession().closeAndClearTokenInformation();
+        }
     }
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
@@ -147,8 +203,10 @@ public class LinkShareDialog extends DialogFragment {
         }
         if (state.isOpened()) {
             Log.i(TAG, "Logged in...");
+            mManager.getFacebookButton().getIndicator().setVisibility(View.VISIBLE);
         } else if (state.isClosed()) {
             Log.i(TAG, "Logged out...");
+            mManager.getFacebookButton().getIndicator().setVisibility(View.INVISIBLE);
         }
     }
 }
