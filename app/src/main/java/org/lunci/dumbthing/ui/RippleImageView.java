@@ -1,17 +1,17 @@
 /*
- *  Copyright (C) 2015 Lunci Hua
- *  *
- *  * Licensed under the Apache License, Version 2.0 (the "License");
- *  * you may not use this file except in compliance with the License.
- *  * You may obtain a copy of the License at
- *  *
- *  *     http://www.apache.org/licenses/LICENSE-2.0
- *  *
- *  * Unless required by applicable law or agreed to in writing, software
- *  * distributed under the License is distributed on an "AS IS" BASIS,
- *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  * See the License for the specific language governing permissions and
- *  * limitations under the License.
+ * Copyright 2015 Lunci Hua
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package org.lunci.dumbthing.ui;
@@ -24,19 +24,19 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
-import android.os.Build;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import org.lunci.dumbthing.R;
 
 
-public class RippleTextView extends TextView {
+public class RippleImageView extends ImageView {
+    private static final String TAG=RippleImageView.class.getSimpleName();
     private int WIDTH;
     private int HEIGHT;
     private int FRAME_RATE = 10;
@@ -67,26 +67,20 @@ public class RippleTextView extends TextView {
         }
     };
     private GestureDetector mGestureDetector;
+   // private OnTouchListener mExternOnTouchListener;
 
-    public RippleTextView(Context context) {
+    public RippleImageView(Context context) {
         super(context);
     }
 
-    public RippleTextView(Context context, AttributeSet attrs) {
+    public RippleImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public RippleTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public RippleImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
-        mGestureDetector.onTouchEvent(event);
-        return super.onTouchEvent(event);
     }
 
     private void init(final Context context, final AttributeSet attrs) {
@@ -151,6 +145,14 @@ public class RippleTextView extends TextView {
             }
         });
     }
+    
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        mGestureDetector.onTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
+
 
     @Override
     public void draw(Canvas canvas) {
@@ -262,22 +264,5 @@ public class RippleTextView extends TextView {
         canvas.drawBitmap(originBitmap, rect, rect, paint);
 
         return output;
-    }
-    
-    public void setTextRipple(CharSequence text){
-        animateRipple();
-        startScaleEffect();
-        this.setText(text);
-    }
-
-    private void startScaleEffect(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            this.animate().scaleX(1.2f).scaleY(1.2f).setDuration(300).withEndAction(new Runnable() {
-                @Override
-                public void run() {
-                    animate().scaleX(1f).scaleY(1f).setDuration(200);
-                }
-            }).start();
-        }
     }
 }

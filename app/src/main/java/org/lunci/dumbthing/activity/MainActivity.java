@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import org.lunci.dumbthing.BuildConfig;
 import org.lunci.dumbthing.R;
 import org.lunci.dumbthing.dataModel.GlobalMessages;
+import org.lunci.dumbthing.dialog.LinkShareDialog;
 import org.lunci.dumbthing.fragment.FunctionFragment;
 import org.lunci.dumbthing.fragment.ItemListFragment;
 import org.lunci.dumbthing.fragment.MainDisplayFragment;
@@ -94,6 +95,9 @@ public class MainActivity extends ActionBarActivity {
             final Intent intent=new Intent(this, AboutActivity.class);
             startActivity(intent);
             return true;
+        }else if(id==R.id.action_link){
+            LinkShareDialog dialog=new LinkShareDialog();
+            dialog.show(getSupportFragmentManager(), LinkShareDialog.class.getSimpleName());
         }
         return super.onOptionsItemSelected(item);
     }

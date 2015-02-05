@@ -32,4 +32,7 @@
     
     <!--deep orange-->
     <color name="deep_orange_500">#FF5722</color>
+
+    <!--Brand-->
+    <color name="facebook_blue">#3B5998</color>
 </resources>

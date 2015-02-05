@@ -24,6 +24,8 @@
     <string name="what_dumb_thing">What dumb thing you just did?</string>
     <string name="add_dumb_thing">Holy crap!</string>
     <string name="about">About</string>
+    <string name="link">Link</string>
+    <string name="link_accounts">Link Accounts</string>
 
     <!--Settings-->
     <string name="share">Share</string>

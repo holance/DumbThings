@@ -48,11 +48,7 @@ public class Utils {
         }
         return null;
     }
-    
-    public static void shareOnFacebook(Context context, String text){
-        
-        
-    }
+
 
     public static String buildDumbContent(String orgContent){
         final PreferencesTracker pref=PreferencesTracker.getInstance();

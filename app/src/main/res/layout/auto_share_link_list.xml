@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2015 Lunci Hua
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    xmlns:res="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tableLayout_link_share"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:padding="10dp"
+    android:shrinkColumns="0,1">
+    <TableRow android:gravity="center">
+        <org.lunci.dumbthing.ui.SquareRippleImageViewByWidth
+            android:id="@+id/imageView_link_facebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_facebook"
+            android:background="@drawable/circle_facebook"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:elevation="4dp"
+            res:rv_centered="true"/>
+        <org.lunci.dumbthing.ui.SquareRippleImageViewByWidth
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_facebook"
+            android:background="@drawable/circle_facebook"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:elevation="4dp"
+            res:rv_centered="true"/>
+    </TableRow>
+    <TableRow android:gravity="center">
+        <org.lunci.dumbthing.ui.SquareRippleImageViewByWidth
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_facebook"
+            android:background="@drawable/circle_facebook"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:elevation="4dp"
+            res:rv_centered="true"/>
+        <org.lunci.dumbthing.ui.SquareRippleImageViewByWidth
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_facebook"
+            android:background="@drawable/circle_facebook"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:elevation="4dp"
+            res:rv_centered="true"/>
+    </TableRow>
+</TableLayout>
