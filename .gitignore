@@ -34,3 +34,4 @@ proguard/
 gradlew
 
 app.properties
+app/src/main/res/values/secrete_string.xml
