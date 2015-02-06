@@ -34,4 +34,7 @@ proguard/
 gradlew
 
 app.properties
-app/src/main/res/values/secrete_string.xml
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+gradle.properties
