@@ -26,6 +26,9 @@
     <string name="about">About</string>
     <string name="link">Link</string>
     <string name="link_accounts">Link Accounts</string>
+    <string name="unlink_facebook_warning">Unlink facebook account?</string>
+    <string name="unlink_twitter_warning">Unlink twitter account?</string>
+    <string name="unlink_google_plus_account">Unlink google plus account?</string>
 
     <!--Settings-->
     <string name="share">Share</string>

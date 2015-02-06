@@ -16,7 +16,9 @@
 
 package org.lunci.dumbthing.dialog;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -34,7 +37,6 @@ import com.facebook.UiLifecycleHelper;
 import org.lunci.dumbthing.BuildConfig;
 import org.lunci.dumbthing.R;
 
-import java.util.Arrays;
 
 /**
  * Created by Lunci on 2/5/2015.
@@ -121,7 +123,7 @@ public class LinkShareDialog extends DialogFragment {
             return mRoot;
         }
 
-        public View getButton() {
+        public ImageView getButton() {
             return mButton;
         }
 
@@ -130,13 +132,24 @@ public class LinkShareDialog extends DialogFragment {
         }
 
         private View mRoot;
-        private View mButton;
+        private ImageView mButton;
         private View mIndicator;
         
         public void init(View root){
             mRoot=root;
-            mButton=root.findViewById(R.id.imageView_link);
+            mButton=(ImageView)root.findViewById(R.id.imageView_link);
             mIndicator=root.findViewById(R.id.imageView_linked_indicator);
+        }
+        
+        public void setIconRes(int resId){
+            mButton.setImageResource(resId);
+
+        }
+        
+        public void setBackgroundRes(int resId){
+            mButton.setBackgroundResource(resId);
+//            mButton.setPadding(10,10,10,10);
+//            mButton.invalidate();
         }
     }
     
@@ -173,6 +186,15 @@ public class LinkShareDialog extends DialogFragment {
             mGooglePlusButton.init(view.findViewById(R.id.link_google_layout));
             mLinkedInButton.init(view.findViewById(R.id.link_linkedin_layout));
             
+            mFacebookButton.setIconRes(R.drawable.ic_facebook);
+            mFacebookButton.setBackgroundRes(R.drawable.circle_facebook);
+            
+            mTwitterButton.setIconRes(R.drawable.ic_twitter);
+            mTwitterButton.setBackgroundRes(R.drawable.circle_twitter);
+            
+            mGooglePlusButton.setIconRes(R.drawable.ic_google_plus);
+            mGooglePlusButton.setBackgroundRes(R.drawable.circle_google_plus);
+            
             if(Session.getActiveSession()==null || Session.getActiveSession().isClosed()
                     || !Session.getActiveSession().isPermissionGranted(mFacebookPublishPermission)){
                 mFacebookButton.getIndicator().setVisibility(View.INVISIBLE);
@@ -180,17 +202,40 @@ public class LinkShareDialog extends DialogFragment {
             mFacebookButton.getButton().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   if(Session.getActiveSession()==null || Session.getActiveSession().isClosed()
-                           || Session.isPublishPermission(mFacebookPublishPermission)) {
+                   if(Session.getActiveSession()==null || !Session.getActiveSession().isPermissionGranted(mFacebookPublishPermission)) {
                        linkFacebook();
                    }else{
                        unlinkFacebook();
                    }
                 }
             });
+            
+            mTwitterButton.getButton().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    
+                }
+            });
+            
+            mGooglePlusButton.getButton().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    
+                }
+            });
+            
+            mLinkedInButton.getButton().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    
+                }
+            });
         }
         
         private void linkFacebook(){
+            if(BuildConfig.DEBUG){
+                Log.i(TAG, "link facebook");
+            }
             com.facebook.widget.LoginButton button=new com.facebook.widget.LoginButton(getActivity());
             button.setFragment(LinkShareDialog.this);
             button.setPublishPermissions(getResources().getStringArray(R.array.facebook_permissions));
@@ -198,7 +243,48 @@ public class LinkShareDialog extends DialogFragment {
         }
         
         private void unlinkFacebook(){
-            Session.getActiveSession().closeAndClearTokenInformation();
+            if(BuildConfig.DEBUG){
+                Log.i(TAG, "unlinkFacebook");
+            }
+            callUnlinkConfirmDialog(R.string.unlink_facebook_warning, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Session.getActiveSession().closeAndClearTokenInformation();
+                }
+            });
+        }
+        
+        private void linkTwitter(){
+            if(BuildConfig.DEBUG){
+                Log.i(TAG, "linkTwitter");
+            }
+
+        }
+        
+        private void unlinkTwitter(){
+            if(BuildConfig.DEBUG){
+                Log.i(TAG, "unlinkTwitter");
+            }
+            callUnlinkConfirmDialog(R.string.unlink_twitter_warning, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });           
+        }
+        
+        private void linkGooglePlus(){
+            if(BuildConfig.DEBUG){
+                Log.i(TAG, "linkGooglePlus");
+            }
+            
+        }
+        
+        private void unlinkGooglePlus(){
+            if(BuildConfig.DEBUG){
+                Log.i(TAG, "unlinkGooglePlus");
+            }
+            
         }
     }
 
@@ -213,5 +299,22 @@ public class LinkShareDialog extends DialogFragment {
             Log.i(TAG, "Logged out...");
             mManager.getFacebookButton().getIndicator().setVisibility(View.INVISIBLE);
         }
+    }
+    
+    private void callUnlinkConfirmDialog(int messageResId, DialogInterface.OnClickListener onConfirmListener){
+        final AlertDialog.Builder builder=new AlertDialog.Builder(this.getActivity());
+        builder.setCancelable(true);
+        builder.setIcon(R.drawable.ic_warning);
+        builder.setMessage(messageResId);
+        builder.setPositiveButton(android.R.string.ok, onConfirmListener);
+        
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        final Dialog dialog=builder.create();
+        dialog.show();
     }
 }

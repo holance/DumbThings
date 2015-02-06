@@ -5,4 +5,7 @@
     <dimen name="textView_counter_margin">55dp</dimen>
     <dimen name="material_dialog_button_min_width">600dp</dimen>
     <dimen name="button_add_margin">25dp</dimen>
+    <dimen name="brand_icon_circle_padding">20dp</dimen>
+    <dimen name="linked_indicator_size">45dp</dimen>
+    <dimen name="linked_indicator_margin">5dp</dimen>
 </resources>

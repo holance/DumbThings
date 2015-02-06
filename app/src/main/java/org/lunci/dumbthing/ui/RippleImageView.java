@@ -250,6 +250,18 @@ public class RippleImageView extends ImageView {
         }
     }
 
+    @Override
+    public void setBackgroundResource(int resid) {
+        int pl = getPaddingLeft();
+        int pt = getPaddingTop();
+        int pr = getPaddingRight();
+        int pb = getPaddingBottom();
+
+        super.setBackgroundResource(resid);
+
+        this.setPadding(pl, pt, pr, pb);
+    }
+
     private Bitmap getCircleBitmap(final int radius) {
         final Bitmap output = Bitmap.createBitmap(originBitmap.getWidth(), originBitmap.getHeight(), Bitmap.Config.ARGB_8888);
         final Canvas canvas = new Canvas(output);

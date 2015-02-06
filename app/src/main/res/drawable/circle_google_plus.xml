@@ -21,5 +21,5 @@
     <padding android:bottom="@dimen/brand_icon_circle_padding" android:left="@dimen/brand_icon_circle_padding"
         android:right="@dimen/brand_icon_circle_padding" android:top="@dimen/brand_icon_circle_padding"/>
     <solid
-        android:color="@color/facebook_blue" />
+        android:color="@color/google_plus_red" />
 </shape>

@@ -26,13 +26,14 @@
             android:src="@drawable/ic_facebook"
             android:background="@drawable/circle_facebook"
             android:layout_margin="10dp"
-            android:padding="10dp"
+            android:padding="@dimen/brand_icon_circle_padding"
             res:rv_centered="true"/>
         <ImageView
             android:id="@+id/imageView_linked_indicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" 
+            android:layout_width="@dimen/linked_indicator_size"
+            android:layout_height="@dimen/linked_indicator_size"
             android:src="@drawable/ic_link_share"
+            android:layout_margin="@dimen/linked_indicator_margin"
             android:layout_alignParentBottom="false"
             android:layout_alignParentRight="false" />
 </RelativeLayout>

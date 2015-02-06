@@ -30,13 +30,14 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'com.android.support:support-v4:21.0.3'
     compile 'com.squareup:android-times-square:1.5.0@aar'
     compile 'com.daimajia.swipelayout:library:1.1.8@aar'
     compile 'com.facebook.android:facebook-android-sdk:3.22.0'
+    compile 'org.twitter4j:twitter4j:4.0.2'
 }
 
 if(project.hasProperty("app.properties")

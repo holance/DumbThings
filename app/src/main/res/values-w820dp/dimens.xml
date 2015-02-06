@@ -7,4 +7,7 @@
     <dimen name="textView_counter_padding">50dp</dimen>
     <dimen name="textView_counter_margin">65dp</dimen>
     <dimen name="button_add_margin">28dp</dimen>
+    <dimen name="brand_icon_circle_padding">30dp</dimen>
+    <dimen name="linked_indicator_size">50dp</dimen>
+    <dimen name="linked_indicator_margin">5dp</dimen>
 </resources>
