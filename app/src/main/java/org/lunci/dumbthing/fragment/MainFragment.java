@@ -155,7 +155,7 @@ public class MainFragment extends ServiceFragmentBase {
 
         mViewHolder.setRippleTextView((RippleTextView) rootView.findViewById(R.id.textView_counter));
         mViewHolder.setAddDumbButton(rootView.findViewById(R.id.textView_add_dumb));
-        mViewHolder.setLinkShareView((ImageView)rootView.findViewById(R.id.imageView_link_share));
+        mViewHolder.setPostButton((ImageView) rootView.findViewById(R.id.imageView_link_share));
         try {
             mViewHolder.setup();
         } catch (NullPointerException ex) {
@@ -174,17 +174,17 @@ public class MainFragment extends ServiceFragmentBase {
         private static final int DELAY = 400;
         private RippleTextView mRippleCounter;
         private View mAddDumbButton;
-        private ImageView mLinkShareView;
+        private ImageView mPostButton;
 
         public ViewHolder() {
         }
 
-        public ImageView getLinkShareView() {
-            return mLinkShareView;
+        public ImageView getPostButton() {
+            return mPostButton;
         }
 
-        public void setLinkShareView(ImageView linkShareView) {
-            this.mLinkShareView = linkShareView;
+        public void setPostButton(ImageView postButton) {
+            this.mPostButton = postButton;
         }
 
         public RippleTextView getRippleTextView() {
@@ -233,6 +233,13 @@ public class MainFragment extends ServiceFragmentBase {
                             mRippleCounter.setEnabled(true);
                         }
                     }, DELAY);
+                }
+            });
+
+            mPostButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getEventBus().post(new GlobalMessages.PostContent("test"));
                 }
             });
         }

@@ -44,6 +44,7 @@ import java.util.List;
 public class MainDisplayFragment extends ServiceFragmentBase {
     private static final String TAG = MainDisplayFragment.class.getSimpleName();
     private static final String EXTRA_ITEMS="extra_items";
+    private static final String EXTRA_CURRENT_INDEX="extra_current_index";
     private ViewHolder mViewHolder = new ViewHolder();
     private DumbItemSimpleAdapter mAdapter;
     private Handler mHandler = new Handler(new Handler.Callback() {
@@ -165,7 +166,12 @@ public class MainDisplayFragment extends ServiceFragmentBase {
         mViewHolder.setRightArrow(rightArrow);
         mViewHolder.init();
         if(savedInstanceState!=null){
-            mViewHolder.setDisplayedChild(mAdapter.getCount()-1);
+            final int index=savedInstanceState.getInt(EXTRA_CURRENT_INDEX);
+            if(index>-1 && index<mAdapter.getCount()){
+                mViewHolder.setDisplayedChild(index);
+            }else {
+                mViewHolder.setDisplayedChild(mAdapter.getCount() - 1);
+            }
         }
         return rootView;
     }
@@ -198,6 +204,7 @@ public class MainDisplayFragment extends ServiceFragmentBase {
             models.add(mAdapter.getItem(i));
         }
         bundle.putParcelableArrayList(EXTRA_ITEMS, models);
+        bundle.putInt(EXTRA_CURRENT_INDEX, mViewHolder.getItemSwitcher().getDisplayedChild());
     }
 
     @Override
@@ -256,6 +263,10 @@ public class MainDisplayFragment extends ServiceFragmentBase {
 
         public void setItemSwitcher(AdapterViewFlipper switcher) {
             mItemSwitcher = switcher;
+        }
+
+        public AdapterViewFlipper getItemSwitcher(){
+            return mItemSwitcher;
         }
 
         public boolean showNext() {

@@ -103,7 +103,7 @@ public class DataService extends Service {
                     succ=true;
                     break;
                 case DataServiceMessages.Service_Get_All_Dates_DESC:
-                    getAllDates(true);
+                    getAllDates(false);
                     succ=true;
                     break;
                 case DataServiceMessages.Service_Get_All_Dates_ASC:

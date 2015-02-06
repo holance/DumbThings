@@ -27,4 +27,12 @@ public class GlobalMessages {
 
 
     }
+
+    public static class PostContent{
+        public final String Content;
+
+        public PostContent(String content){
+            Content=content;
+        }
+    }
 }

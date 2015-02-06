@@ -21,16 +21,16 @@ import org.lunci.dumbthing.fragment.ItemListFragment;
 import org.lunci.dumbthing.fragment.MainDisplayFragment;
 import org.lunci.dumbthing.fragment.MainFragment;
 import org.lunci.dumbthing.service.AsyncMessage;
+import org.lunci.dumbthing.util.AutoShareManager;
 import org.lunci.dumbthing.util.Utils;
 
 import de.greenrobot.event.EventBus;
 
 
 public class MainActivity extends ActionBarActivity {
-
-    
     private static final String TAG = MainActivity.class.getSimpleName();
     private EventBus mEventBus = EventBus.getDefault();
+    private AutoShareManager mAutoShareManager;
     private Handler mHandler = new Handler(new android.os.Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -70,6 +70,7 @@ public class MainActivity extends ActionBarActivity {
         } else {
             getSupportFragmentManager().beginTransaction().commit();
         }
+        mAutoShareManager=new AutoShareManager(this);
     }
 
 
@@ -127,5 +128,9 @@ public class MainActivity extends ActionBarActivity {
             Log.i(TAG, "onEventMainThread, what=" + msg.what);
         }
         mHandler.dispatchMessage(msg);
+    }
+
+    public void onEventMainThread(GlobalMessages.PostContent content){
+        mAutoShareManager.publishStoryOnFacebook(content.Content);
     }
 }

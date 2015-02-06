@@ -43,6 +43,8 @@ public class LinkShareDialog extends DialogFragment {
     private final LinkAccountManager mManager=new LinkAccountManager();
     private static final String TAG=LinkShareDialog.class.getSimpleName();
     private UiLifecycleHelper uiHelper;
+    private String mFacebookPublishPermission;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -55,6 +57,7 @@ public class LinkShareDialog extends DialogFragment {
             }
         });
         uiHelper.onCreate(savedInstanceState);
+        mFacebookPublishPermission=getResources().getString(R.string.facebook_publish_permission);
     }
 
     @Override
@@ -170,13 +173,15 @@ public class LinkShareDialog extends DialogFragment {
             mGooglePlusButton.init(view.findViewById(R.id.link_google_layout));
             mLinkedInButton.init(view.findViewById(R.id.link_linkedin_layout));
             
-            if(Session.getActiveSession()==null || Session.getActiveSession().isClosed()){
+            if(Session.getActiveSession()==null || Session.getActiveSession().isClosed()
+                    || !Session.getActiveSession().isPermissionGranted(mFacebookPublishPermission)){
                 mFacebookButton.getIndicator().setVisibility(View.INVISIBLE);
             }
             mFacebookButton.getButton().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   if(Session.getActiveSession()==null || Session.getActiveSession().isClosed()) {
+                   if(Session.getActiveSession()==null || Session.getActiveSession().isClosed()
+                           || Session.isPublishPermission(mFacebookPublishPermission)) {
                        linkFacebook();
                    }else{
                        unlinkFacebook();
@@ -188,7 +193,7 @@ public class LinkShareDialog extends DialogFragment {
         private void linkFacebook(){
             com.facebook.widget.LoginButton button=new com.facebook.widget.LoginButton(getActivity());
             button.setFragment(LinkShareDialog.this);
-            button.setPublishPermissions(Arrays.asList("publish_actions"));
+            button.setPublishPermissions(getResources().getStringArray(R.array.facebook_permissions));
             button.performClick();
         }
         

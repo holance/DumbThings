@@ -18,51 +18,104 @@ package org.lunci.dumbthing.util;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.facebook.FacebookRequestError;
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.RequestAsyncTask;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.FacebookError;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.lunci.dumbthing.BuildConfig;
+import org.lunci.dumbthing.R;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Created by Lunci on 2/4/2015.
  */
 public class AutoShareManager {
-    private Facebook mFacebook;
-    private AsyncFacebookRunner mAsyncRunner;
-    private String mAppId="";
+    private static final String TAG=AutoShareManager.class.getSimpleName();
     private Activity mActivity;
+    private String[] PERMISSIONS;
     
     public AutoShareManager(Activity activity){
         mActivity=activity;
-        mFacebook = new Facebook(mAppId);
-        mAsyncRunner = new AsyncFacebookRunner(mFacebook);
+        PERMISSIONS=activity.getResources().getStringArray(R.array.facebook_permissions);
     }
 
-    public void shareOnFacebook(View v, String text) {
-        mFacebook.dialog(mActivity, "feed", new Facebook.DialogListener() {
-
+    public void publishStoryOnFacebook(final String content) {
+        if(BuildConfig.DEBUG){
+            Log.i(TAG, "publishStoryOnFacebook");
+        }
+        Session.openActiveSession(mActivity, true, new Session.StatusCallback() {
             @Override
-            public void onFacebookError(FacebookError error) {
-                Toast.makeText(mActivity, "Post fail " + error, Toast.LENGTH_LONG).show();
-            }
+            public void call(Session session, SessionState sessionState, Exception e) {
+                if(BuildConfig.DEBUG){
+                    Log.i(TAG, "onSessionStateChange");
+                }
+                if (session!=null && sessionState.isOpened()) {
+                    Log.i(TAG, "Logged in...");
+                    // Check for publish permissions
+                    List<String> permissions = session.getPermissions();
+                    if (!isSubsetOf(PERMISSIONS, permissions)) {
+                        Log.w(TAG, "Permission denied. Please relink facebook.");
+                        Toast toast=Toast.makeText(mActivity, R.string.send_to_facebook_failed, Toast.LENGTH_SHORT);
+                        toast.show();
+                        return;
+                    }
+                    final Bundle postParams = new Bundle();
+                    postParams.putString("message", content);
 
-            @Override
-            public void onError(DialogError error) {
-                Toast.makeText(mActivity, "Post fail due to " + error, Toast.LENGTH_LONG).show();
-            }
+                    Request.Callback callback= new Request.Callback() {
+                        public void onCompleted(Response response) {
+                            if(BuildConfig.DEBUG){
+                                Log.i(TAG, "onCompleted");
+                                try {
+                                    Session.getActiveSession().close();
+                                }catch (NullPointerException ex){
+                                    ex.printStackTrace();
+                                }
+                            }
+                            final FacebookRequestError error = response.getError();
+                            if (error != null) {
+                                Log.e(TAG, "post on facebook error:"+error.getErrorMessage());
+                            }
+                        }
+                    };
 
-            @Override
-            public void onComplete(Bundle values) {
-                Toast.makeText(mActivity, "Post success.", Toast.LENGTH_LONG).show();
-            }
+                    final Request request = new Request(session, "me/feed", postParams,
+                            HttpMethod.POST, callback);
+                    if(BuildConfig.DEBUG){
+                        Log.i(TAG, "start publishing");
+                    }
+                    final RequestAsyncTask task = new RequestAsyncTask(request);
+                    task.execute();
 
-            @Override
-            public void onCancel() {
-                Toast.makeText(mActivity, "Cancle by user!", Toast.LENGTH_LONG).show();
+                } else if (sessionState.isClosed()) {
+                    Log.i(TAG, "Logged out...");
+                }
             }
         });
+    }
+    private boolean isSubsetOf(String[] subset, Collection<String> superset) {
+        for (String string : subset) {
+            if (!superset.contains(string)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

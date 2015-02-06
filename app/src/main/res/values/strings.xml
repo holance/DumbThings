@@ -52,4 +52,7 @@
     <string name="email_string">Email</string>
     <string name="about_string">About</string>
     <string name="rate_this_app_string">Rate it!</string>
+    
+    <!--Error messages-->
+    <string name="send_to_facebook_failed">Post on facebook failed. Please relink facebook.</string>
 </resources>
