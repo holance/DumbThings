@@ -25,10 +25,18 @@
     <string name="add_dumb_thing">Holy crap!</string>
     <string name="about">About</string>
     <string name="link">Link</string>
+
+    <!--Link Account Info-->
     <string name="link_accounts">Link Accounts</string>
     <string name="unlink_facebook_warning">Unlink facebook account?</string>
     <string name="unlink_twitter_warning">Unlink twitter account?</string>
     <string name="unlink_google_plus_account">Unlink google plus account?</string>
+    <string name="link_facebook_succeed">Facebook is linked.</string>
+    <string name="link_twitter_succeed">Twitter is linked.</string>
+    <string name="link_google_plus_succeed">Google plus is linked.</string>
+    <string name="link_facebook_failed">Link Facebook failed.</string>
+    <string name="link_twitter_failed">Link Twitter failed.</string>
+    <string name="link_google_plus_failed">Link Google plus failed.</string>
 
     <!--Settings-->
     <string name="share">Share</string>
@@ -58,4 +66,5 @@
     
     <!--Error messages-->
     <string name="send_to_facebook_failed">Post on facebook failed. Please relink facebook.</string>
+    <string name="send_to_twitter_failed">Post on twitter failed. Please relink twitter.</string>
 </resources>

@@ -20,4 +20,8 @@ public class Keys {
     public static final String Preference_Default_Suffix="preference_default_suffix";
     public static final String Preference_Enable_Suffix="preference_enable_suffix";
     public static final String Preference_Enable_Auto_Share="preference_enable_auto_share_pop";
+
+    public static final String Preference_Facebook_Linked="preference_facebook_linked";
+    public static final String Preference_Twitter_Linked="preference_twitter_linked";
+    public static final String Preference_Google_Plus_Linked="preference_google_plus_linked";
 }

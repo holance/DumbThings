@@ -23,11 +23,27 @@ import org.lunci.dumbthing.app.DumbThingsApp;
 public class PreferencesTracker implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static PreferencesTracker mInstance;
-    private boolean mEnableAutoPrefix = true;
-    private boolean mEnableAutoSuffix = true;
+    private boolean mEnableAutoPrefix = false;
+    private boolean mEnableAutoSuffix = false;
     private String mPrefix;
     private String mSuffix;
     private boolean mEnableAutoShare=true;
+
+    public boolean isFacebookLinked() {
+        return mFacebookLinked;
+    }
+
+    public boolean isGooglePlusLinked() {
+        return mGooglePlusLinked;
+    }
+
+    public boolean isTwitterLinked() {
+        return mTwitterLinked;
+    }
+
+    private boolean mFacebookLinked=false;
+    private boolean mGooglePlusLinked=false;
+    private boolean mTwitterLinked=false;
 
     protected PreferencesTracker() {
 
@@ -84,22 +100,26 @@ public class PreferencesTracker implements SharedPreferences.OnSharedPreferenceC
         }
 
         if (sharedPreferences.contains(Keys.Preference_Enable_Prefix)) {
-            mEnableAutoPrefix = sharedPreferences.getBoolean(Keys.Preference_Enable_Prefix, true);
+            mEnableAutoPrefix = sharedPreferences.getBoolean(Keys.Preference_Enable_Prefix, false);
         } else {
             sharedPreferences.edit().putBoolean(Keys.Preference_Enable_Prefix, mEnableAutoPrefix).commit();
         }
 
         if (sharedPreferences.contains(Keys.Preference_Enable_Suffix)) {
-            mEnableAutoSuffix = sharedPreferences.getBoolean(Keys.Preference_Enable_Suffix, true);
+            mEnableAutoSuffix = sharedPreferences.getBoolean(Keys.Preference_Enable_Suffix, false);
         } else {
             sharedPreferences.edit().putBoolean(Keys.Preference_Enable_Suffix, mEnableAutoSuffix).commit();
         }
 
         if (sharedPreferences.contains(Keys.Preference_Enable_Auto_Share)) {
-            mEnableAutoShare = sharedPreferences.getBoolean(Keys.Preference_Enable_Auto_Share, true);
+            mEnableAutoShare = sharedPreferences.getBoolean(Keys.Preference_Enable_Auto_Share, false);
         } else {
             sharedPreferences.edit().putBoolean(Keys.Preference_Enable_Auto_Share, mEnableAutoShare).commit();
         }
+
+        mFacebookLinked=sharedPreferences.getBoolean(Keys.Preference_Facebook_Linked, false);
+        mGooglePlusLinked=sharedPreferences.getBoolean(Keys.Preference_Google_Plus_Linked, false);
+        mTwitterLinked=sharedPreferences.getBoolean(Keys.Preference_Twitter_Linked, false);
     }
 
     @Override
@@ -111,11 +131,17 @@ public class PreferencesTracker implements SharedPreferences.OnSharedPreferenceC
             mSuffix = sharedPreferences.getString(Keys.Preference_Default_Suffix,
                     DumbThingsApp.getContext().getString(R.string.default_tail));
         } else if (key.equals(Keys.Preference_Enable_Prefix)) {
-            mEnableAutoPrefix = sharedPreferences.getBoolean(Keys.Preference_Enable_Prefix, true);
+            mEnableAutoPrefix = sharedPreferences.getBoolean(Keys.Preference_Enable_Prefix, false);
         } else if (key.equals(Keys.Preference_Enable_Suffix)) {
-            mEnableAutoSuffix = sharedPreferences.getBoolean(Keys.Preference_Enable_Suffix, true);
+            mEnableAutoSuffix = sharedPreferences.getBoolean(Keys.Preference_Enable_Suffix, false);
         }else if(key.equals(Keys.Preference_Enable_Auto_Share)){
-            mEnableAutoShare=sharedPreferences.getBoolean(Keys.Preference_Enable_Auto_Share, true);
+            mEnableAutoShare=sharedPreferences.getBoolean(Keys.Preference_Enable_Auto_Share, false);
+        }else if(key.equals(Keys.Preference_Facebook_Linked)){
+            mFacebookLinked=sharedPreferences.getBoolean(Keys.Preference_Facebook_Linked, false);
+        }else if(key.equals(Keys.Preference_Google_Plus_Linked)){
+            mFacebookLinked=sharedPreferences.getBoolean(Keys.Preference_Google_Plus_Linked, false);
+        }else if(key.equals(Keys.Preference_Twitter_Linked)){
+            mFacebookLinked=sharedPreferences.getBoolean(Keys.Preference_Twitter_Linked, false);
         }
     }
 }

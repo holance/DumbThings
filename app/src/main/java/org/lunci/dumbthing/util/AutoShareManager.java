@@ -19,7 +19,6 @@ package org.lunci.dumbthing.util;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.facebook.FacebookRequestError;
@@ -29,17 +28,13 @@ import com.facebook.RequestAsyncTask;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
-import com.facebook.android.AsyncFacebookRunner;
-import com.facebook.android.DialogError;
-import com.facebook.android.Facebook;
-import com.facebook.android.FacebookError;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterException;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.lunci.dumbthing.BuildConfig;
 import org.lunci.dumbthing.R;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -67,7 +62,7 @@ public class AutoShareManager {
                     Log.i(TAG, "onSessionStateChange");
                 }
                 if (session!=null && sessionState.isOpened()) {
-                    Log.i(TAG, "Logged in...");
+                    Log.i(TAG, "Facebook Logged in...");
                     // Check for publish permissions
                     List<String> permissions = session.getPermissions();
                     if (!isSubsetOf(PERMISSIONS, permissions)) {
@@ -110,6 +105,49 @@ public class AutoShareManager {
             }
         });
     }
+
+    public void publishStoryOnTwitter(final String content){
+        if(BuildConfig.DEBUG){
+            Log.i(TAG, "publishStoryOnTwitter:"+content);
+        }
+        Twitter.logIn(mActivity, new com.twitter.sdk.android.core.Callback(){
+
+            @Override
+            public void success(Result result) {
+                if(BuildConfig.DEBUG){
+                    Log.i(TAG, "twitter logged in");
+                }
+                Twitter.getInstance().core.getApiClient().getStatusesService().update(content, null, null, null, null, null, null, null,new com.twitter.sdk.android.core.Callback(){
+
+                    @Override
+                    public void success(Result result) {
+                        if(BuildConfig.DEBUG){
+                            Log.w(TAG, "twitter post succeeded");
+                        }
+                    }
+
+                    @Override
+                    public void failure(TwitterException e) {
+                        if(BuildConfig.DEBUG){
+                            Log.w(TAG, "twitter post failed");
+                        }
+                        final Toast toast=Toast.makeText(mActivity, R.string.send_to_twitter_failed, Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                });
+            }
+
+            @Override
+            public void failure(TwitterException e) {
+                if(BuildConfig.DEBUG){
+                    Log.w(TAG, "twitter logged in failed");
+                }
+                final Toast toast=Toast.makeText(mActivity, R.string.send_to_twitter_failed, Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
+    }
+
     private boolean isSubsetOf(String[] subset, Collection<String> superset) {
         for (String string : subset) {
             if (!superset.contains(string)) {
