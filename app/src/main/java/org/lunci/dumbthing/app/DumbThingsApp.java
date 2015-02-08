@@ -24,6 +24,7 @@ import android.preference.PreferenceManager;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
+import org.lunci.dumbthing.R;
 import org.lunci.dumbthing.preference.PreferencesTracker;
 
 import io.fabric.sdk.android.Fabric;
@@ -34,13 +35,15 @@ import io.fabric.sdk.android.Fabric;
 public class DumbThingsApp extends Application {
 
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
-    private static final String TWITTER_KEY = "ZuQ3ExS9j07Tfu1lOWjMSjBPV";
-    private static final String TWITTER_SECRET = "QM4K65eGH7pNx3vw0cMijwZCPt26O0F2PWz5QM12yfgQiAbbbi";
+    private static String TWITTER_KEY;
+    private static String TWITTER_SECRET;
     private static Context mContext;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        TWITTER_KEY=getResources().getString(R.string.twitter_key);
+        TWITTER_SECRET=getResources().getString(R.string.twitter_secrete);
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
         mContext = getApplicationContext();
