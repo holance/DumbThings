@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterViewFlipper;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import org.lunci.dumbthing.BuildConfig;
 import org.lunci.dumbthing.R;
@@ -158,7 +159,7 @@ public class MainDisplayFragment extends ServiceFragmentBase {
         final AdapterViewFlipper flipper = (AdapterViewFlipper) rootView.findViewById(R.id.adapterViewFlipper_last_item);
         mViewHolder.setItemSwitcher(flipper);
         mViewHolder.setRootView(rootView);
-        final ImageButton shareButton = (ImageButton) rootView.findViewById(R.id.textView_share);
+        final ImageView shareButton = (ImageView) rootView.findViewById(R.id.textView_share);
         mViewHolder.setShareButton(shareButton);
         final View leftArrow = rootView.findViewById(R.id.imageView_left_arrow);
         final View rightArrow = rootView.findViewById(R.id.imageView_right_arrow);
@@ -223,7 +224,7 @@ public class MainDisplayFragment extends ServiceFragmentBase {
         private AdapterViewFlipper mItemSwitcher;
         private View mLeftArrow;
         private View mRightArrow;
-        private ImageButton mShareButton;
+        private ImageView mShareButton;
 
         public View getRootView() {
             return mRootView;
@@ -249,11 +250,11 @@ public class MainDisplayFragment extends ServiceFragmentBase {
             this.mLeftArrow = leftArrow;
         }
 
-        public ImageButton getShareButton() {
+        public ImageView getShareButton() {
             return mShareButton;
         }
 
-        public void setShareButton(ImageButton shareButton) {
+        public void setShareButton(ImageView shareButton) {
             this.mShareButton = shareButton;
         }
 

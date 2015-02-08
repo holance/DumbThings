@@ -31,8 +31,10 @@
     </TableRow>
     <TableRow android:gravity="center">
         <include layout="@layout/link_share_button"
-            android:id="@+id/link_google_layout"></include>
+            android:id="@+id/link_google_layout"
+            android:visibility="invisible"></include>
         <include layout="@layout/link_share_button"
-            android:id="@+id/link_linkedin_layout"></include>
+            android:id="@+id/link_linkedin_layout"
+            android:visibility="invisible"></include>
     </TableRow>
 </TableLayout>

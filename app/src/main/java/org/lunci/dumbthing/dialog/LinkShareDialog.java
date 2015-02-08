@@ -41,23 +41,12 @@ import org.lunci.dumbthing.preference.PreferencesTracker;
  */
 public class LinkShareDialog extends DialogFragment {
     private static final String TAG = LinkShareDialog.class.getSimpleName();
-    ;
     private final LinkAccountManager mManager = new LinkAccountManager();
-    // private UiLifecycleHelper uiHelper;
     private String mFacebookPublishPermission;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        uiHelper = new UiLifecycleHelper(getActivity(), new Session.StatusCallback() {
-//            @Override
-//            public void call(Session session, SessionState sessionState, Exception e) {
-//                if (BuildConfig.DEBUG) {
-//                    Log.i(TAG, "StatusCallback call");
-//                }
-//            }
-//        });
-//        uiHelper.onCreate(savedInstanceState);
         mFacebookPublishPermission = getResources().getString(R.string.facebook_publish_permission);
     }
 
@@ -84,13 +73,6 @@ public class LinkShareDialog extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-//        Session session = Session.getActiveSession();
-//        if (session != null &&
-//                (session.isOpened() || session.isClosed())) {
-//            onSessionStateChange(session, session.getState(), null);
-//        }
-
-        // uiHelper.onResume();
     }
 
     @Override
@@ -102,35 +84,17 @@ public class LinkShareDialog extends DialogFragment {
     @Override
     public void onPause() {
         super.onPause();
-        //  uiHelper.onPause();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //    uiHelper.onDestroy();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        //   uiHelper.onSaveInstanceState(outState);
     }
-
-//    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
-//        if (BuildConfig.DEBUG) {
-//            Log.i(TAG, "onSessionStateChange");
-//        }
-//        if (state.isOpened()) {
-//            Log.i(TAG, "Logged in...");
-//            mManager.getFacebookButton().getIndicator().setVisibility(View.VISIBLE);
-//            final Toast toast = Toast.makeText(getActivity(), R.string.link_facebook_succeed, Toast.LENGTH_SHORT);
-//            toast.show();
-//        } else if (state.isClosed()) {
-//            Log.i(TAG, "Logged out...");
-//            mManager.getFacebookButton().getIndicator().setVisibility(View.INVISIBLE);
-//        }
-//    }
 
     private enum CurrentMode {None, Facebook, Twitter, GooglePlus}
 
@@ -251,7 +215,5 @@ public class LinkShareDialog extends DialogFragment {
                 }
             }
         };
-
-
     }
 }

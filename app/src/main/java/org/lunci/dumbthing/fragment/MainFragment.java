@@ -126,7 +126,7 @@ public class MainFragment extends ServiceFragmentBase {
     }
 
     private void update() {
-        sendMessageToService(Message.obtain(null, DataServiceMessages.Service_Get_Item_Count));
+        sendMessageToService(Message.obtain(null, DataServiceMessages.Service_Get_Item_Count_Sticky));
     }
 
     @Override

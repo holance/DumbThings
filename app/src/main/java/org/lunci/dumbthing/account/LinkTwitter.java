@@ -84,7 +84,7 @@ public class LinkTwitter extends LinkAccountBase {
     @Override
     public void unlink() {
         if(BuildConfig.DEBUG){
-            Log.i(TAG, "unlinkFacebook");
+            Log.i(TAG, "unlinkTwitter");
         }
         callUnlinkConfirmDialog(R.string.unlink_twitter_warning, new DialogInterface.OnClickListener() {
             @Override

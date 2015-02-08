@@ -46,17 +46,21 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@drawable/ic_right"/>
-        <org.lunci.dumbthing.ui.RippleView
+        <LinearLayout android:orientation="vertical"
+            android:layout_height="match_parent"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            res:rv_centered="true">
-            <ImageButton
+            android:gravity="center_vertical">
+            <org.lunci.dumbthing.ui.RippleImageView
                 android:id="@+id/textView_share"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_share"
                 android:background="@color/transparent"
-                android:padding="@dimen/textView_counter_padding" />
-        </org.lunci.dumbthing.ui.RippleView>
+                android:padding="@dimen/textView_counter_padding"
+                res:rv_centered="true"
+                android:layout_gravity="center" />
+            
+        </LinearLayout>
+
     </LinearLayout>
 </org.lunci.dumbthing.ui.MaterialRippleLayout>

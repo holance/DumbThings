@@ -30,13 +30,13 @@
         android:background="@drawable/circle_green_500"
         android:gravity="center"
         res:rv_centered="true"
-        android:src="@drawable/ic_link_share"
+        android:src="@drawable/ic_share_auto"
         style="@style/TextAppearance.AppCompat.Large"
         android:layout_margin="@dimen/textView_counter_margin"
         android:elevation="4dp"
         android:clickable="true"
         android:enabled="true"
-        android:scaleType="fitCenter" />
+        android:scaleType="center" />
     
     <org.lunci.dumbthing.ui.SquareRippleTextView
         android:id="@+id/textView_add_dumb"

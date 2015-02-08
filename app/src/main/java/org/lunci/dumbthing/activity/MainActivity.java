@@ -131,8 +131,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onEventMainThread(GlobalMessages.PostContent content){
-      //  mAutoShareManager.publishStoryOnFacebook(content.Content);
-        mAutoShareManager.publishStoryOnTwitter(content.Content);
+       // mAutoShareManager.shareOn(new String[]{AutoShareManager.PostFacebookModule}, content.Content);
+        mAutoShareManager.shareOn(new String[]{AutoShareManager.PostTwitterModule}, content.Content);
     }
 
     @Override
@@ -141,6 +141,9 @@ public class MainActivity extends ActionBarActivity {
         final Fragment linkShareFragment= getSupportFragmentManager().findFragmentByTag(LinkShareDialog.class.getSimpleName());
         if(linkShareFragment!=null){
             linkShareFragment.onActivityResult(requestCode, resultCode, data);
+        }
+        else{
+            mAutoShareManager.onActivityResult(requestCode, resultCode, data);
         }
     }
 }
