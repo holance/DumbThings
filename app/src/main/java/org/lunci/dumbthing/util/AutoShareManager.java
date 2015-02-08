@@ -24,16 +24,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
 import com.facebook.FacebookRequestError;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.RequestAsyncTask;
 import com.facebook.Response;
 import com.facebook.Session;
-import com.facebook.SessionLoginBehavior;
 import com.facebook.SessionState;
-import com.facebook.android.Facebook;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
@@ -254,7 +251,7 @@ public class AutoShareManager {
                 if(BuildConfig.DEBUG){
                     Log.i(TAG, "start login twitter");
                 }
-                Twitter.logIn(mActivity, mCallback);
+             //   Twitter.logIn(mActivity, mCallback);
             }
         }
         
@@ -289,6 +286,7 @@ public class AutoShareManager {
                         public void failure(TwitterException e) {
                             if(BuildConfig.DEBUG){
                                 Log.w(TAG, "twitter post failed:"+e.getMessage());
+                                e.printStackTrace();
                             }
                             final Toast toast=Toast.makeText(mActivity, R.string.send_to_twitter_failed, Toast.LENGTH_SHORT);
                             toast.show();
@@ -301,6 +299,7 @@ public class AutoShareManager {
             if(BuildConfig.DEBUG){
                 Log.i(TAG, "onActivityResult, requestCode="+requestCode+"; resultCode="+resultCode);
             }
+
         }
     }
 
