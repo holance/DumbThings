@@ -26,6 +26,7 @@ import com.daimajia.swipe.util.Attributes;
 
 import org.lunci.dumbthing.R;
 import org.lunci.dumbthing.dataModel.DumbModel;
+import org.lunci.dumbthing.util.Utils;
 
 import java.util.List;
 
@@ -101,10 +102,14 @@ public class DumbItemListAdapter extends ArrayAdapter<DumbModel> implements Swip
             holder.mRoot=convertView;
             final View buttonEdit=convertView.findViewById(R.id.imageButton_edit);
             final View buttonDelete=convertView.findViewById(R.id.imageButton_delete);
+            final View buttonShare=convertView.findViewById(R.id.imageView_share);
+            final View buttonAutoShare=convertView.findViewById(R.id.imageView_auto_share);
             holder.mDeleteButton=buttonDelete;
             holder.mEditButton=buttonEdit;
+            holder.mShareButton=buttonShare;
+            holder.mAutoShareButton=buttonAutoShare;
             final SwipeLayout swipe=(SwipeLayout)convertView;
-            swipe.setDragEdge(SwipeLayout.DragEdge.Right);
+            swipe.setDragEdge(SwipeLayout.DragEdge.Left);
             swipe.setShowMode(SwipeLayout.ShowMode.PullOut);
             swipe.setSwipeEnabled(true);
             try {
@@ -119,6 +124,7 @@ public class DumbItemListAdapter extends ArrayAdapter<DumbModel> implements Swip
             final ViewHolder holder=(ViewHolder)convertView.getTag();
             holder.mDate.setText(model.getCreatedAt());
             holder.mContent.setText(model.getContent());
+            holder.mCurrentIndex=position;
         }
         return convertView;
     }
@@ -187,7 +193,11 @@ public class DumbItemListAdapter extends ArrayAdapter<DumbModel> implements Swip
         public TextView mContent;
         public View mDeleteButton;
         public View mEditButton;
+        public View mShareButton;
+        public View mAutoShareButton;
         public View mRoot;
+        public View mSlideIndicator;
+        public int mCurrentIndex;
 
         public void setup()throws NullPointerException{
             mDeleteButton.setOnClickListener(new View.OnClickListener() {
@@ -206,6 +216,26 @@ public class DumbItemListAdapter extends ArrayAdapter<DumbModel> implements Swip
                     if(mItemManger.getOpenItems().size()==1) {
                         final int pos=mItemManger.getOpenItems().get(0);
                         mCallbacks.onItemEdit(pos, mRoot);
+                    }
+                }
+            });
+
+            mShareButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mItemManger.getOpenItems().size()==1) {
+                        final int pos=mItemManger.getOpenItems().get(0);
+                        Utils.shareText(getContext(), getItem(pos).getContent());
+                    }                    
+                }
+            });
+            
+            mAutoShareButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mItemManger.getOpenItems().size()==1) {
+                        final int pos=mItemManger.getOpenItems().get(0);
+                        Utils.autoShareText(getContext(), getItem(pos).getContent());
                     }
                 }
             });
