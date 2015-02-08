@@ -106,8 +106,13 @@ public class CalendarDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Dialog dialog = super.onCreateDialog(savedInstanceState);
-
+        dialog.setTitle(R.string.dumb_thing_calendar);
         return dialog;
+    }
+    
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
     }
 
     @Override

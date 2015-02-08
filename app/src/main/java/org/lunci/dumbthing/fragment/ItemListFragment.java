@@ -17,6 +17,7 @@
 package org.lunci.dumbthing.fragment;
 
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -36,6 +37,7 @@ import org.lunci.dumbthing.R;
 import org.lunci.dumbthing.adapter.DumbItemListAdapter;
 import org.lunci.dumbthing.dataModel.DumbModel;
 import org.lunci.dumbthing.dataModel.GlobalMessages;
+import org.lunci.dumbthing.dialog.EditDumbThingDialog;
 import org.lunci.dumbthing.service.DataServiceMessages;
 import org.lunci.dumbthing.util.DateTimeHelper;
 
@@ -82,11 +84,17 @@ public class ItemListFragment extends ServiceFragmentBase implements AbsListView
                     if (msg.obj instanceof Date) {
                         final Date date = (Date) msg.obj;
                         findItemByDate(date);
+                        succ=true;
                     }
                     break;
                 case DataServiceMessages.Service_Remove_Item_Finished:
                     getEventBus().postSticky(new GlobalMessages.UpdateMainDisplayFragment());
                     getEventBus().postSticky(new GlobalMessages.UpdateMainFragment());
+                    succ=true;
+                    break;
+                case DataServiceMessages.Service_Modify_Item_Finished:
+                    getEventBus().postSticky(new GlobalMessages.UpdateMainDisplayFragment());
+                    succ=true;
                     break;
             }
             return succ;
@@ -178,8 +186,27 @@ public class ItemListFragment extends ServiceFragmentBase implements AbsListView
         if (BuildConfig.DEBUG) {
             Log.i(TAG, "onItemClick, position=" + position);
         }
-
+        final EditDumbThingDialog dialog=EditDumbThingDialog.newInstance(mAdapter.getItem(position), position);
+        dialog.setCallbacks(mEditDumbThingDialogCallbacks);
+        dialog.show(getFragmentManager(), EditDumbThingDialog.class.getSimpleName());
     }
+    
+    private EditDumbThingDialog.EditDumbThingDialogCallbacks mEditDumbThingDialogCallbacks=new EditDumbThingDialog.EditDumbThingDialogCallbacks(){
+
+        @Override
+        public void onConfirmed(long id, ContentValues updatedValues, int position) {
+            mAdapter.getItem(position).setContent(updatedValues.getAsString(DumbModel.Content_Field));
+            final Bundle bundle=new Bundle();
+            bundle.putLong(DataServiceMessages.EXTRA_ID, id);
+            bundle.putParcelable(DataServiceMessages.EXTRA_CONTENTVALUES, updatedValues);
+            sendMessageToService(Message.obtain(null, DataServiceMessages.Service_Modify_Item, -1, -1, bundle));
+        }
+
+        @Override
+        public void onCanceled() {
+
+        }
+    };
 
     @Override
     public void onItemEdit(final int position, final View view) {

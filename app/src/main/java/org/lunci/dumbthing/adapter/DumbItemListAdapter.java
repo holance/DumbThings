@@ -29,6 +29,8 @@ import org.lunci.dumbthing.dataModel.DumbModel;
 import org.lunci.dumbthing.util.Utils;
 
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by Lunci Hua on 2/2/2015.
@@ -121,10 +123,12 @@ public class DumbItemListAdapter extends ArrayAdapter<DumbModel> implements Swip
         mItemManger.updateConvertView(convertView, position);
         if(convertView.getTag() instanceof ViewHolder){
             final DumbModel model=getItem(position);
+            model.deleteObservers();
             final ViewHolder holder=(ViewHolder)convertView.getTag();
             holder.mDate.setText(model.getCreatedAt());
             holder.mContent.setText(model.getContent());
             holder.mCurrentIndex=position;
+            model.addObserver(holder);
         }
         return convertView;
     }
@@ -188,7 +192,7 @@ public class DumbItemListAdapter extends ArrayAdapter<DumbModel> implements Swip
         mCallbacks=callbacks;
     }
 
-    private final class ViewHolder{
+    private final class ViewHolder implements Observer {
         public TextView mDate;
         public TextView mContent;
         public View mDeleteButton;
@@ -239,6 +243,25 @@ public class DumbItemListAdapter extends ArrayAdapter<DumbModel> implements Swip
                     }
                 }
             });
+        }
+
+        @Override
+        public void update(Observable observable, Object data) {
+            if(observable instanceof DumbModel) {
+                final DumbModel model = (DumbModel) observable;
+                if (data instanceof String) {
+                    switch ((String) data) {
+                        case DumbModel.Content_Field:
+                            mContent.setText(model.getContent());
+                            break;
+                        case DumbModel.CreatedAt_Field:
+                            mDate.setText(model.getCreatedAt());
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
         }
     }
 }

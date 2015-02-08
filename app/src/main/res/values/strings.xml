@@ -25,6 +25,7 @@
     <string name="add_dumb_thing">Holy crap!</string>
     <string name="about">About</string>
     <string name="link">Link</string>
+    <string name="dumb_thing_calendar">Dumb Things Calendar</string>
 
     <!--Link Account Info-->
     <string name="link_accounts">Link Accounts</string>

@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/ic_delete"
-        android:layout_marginRight="1dp"
+        android:layout_marginRight="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:scaleType="center"
@@ -42,12 +42,13 @@
         android:layout_height="match_parent"
         android:src="@drawable/ic_edit"
         android:scaleType="center"
-        android:layout_marginRight="1dp"
+        android:layout_marginRight="2dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         res:rv_type="simpleRipple"
         res:rv_centered="true"
-        res:rv_rippleDuration="200"/>
+        res:rv_rippleDuration="200"
+        android:visibility="gone"/>
 
     <org.lunci.dumbthing.ui.RippleImageView
         android:id="@+id/imageView_auto_share"
@@ -56,7 +57,7 @@
         android:src="@drawable/ic_share_auto"
         android:background="@color/blue_900"
         android:scaleType="center"
-        android:layout_marginRight="1dp"
+        android:layout_marginRight="2dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         res:rv_centered="true"

@@ -201,12 +201,16 @@ public class MainDisplayFragment extends ServiceFragmentBase {
     @Override
     public void onSaveInstanceState(Bundle bundle){
         super.onSaveInstanceState(bundle);
-        final ArrayList<DumbModel> models=new ArrayList<>(mAdapter.getCount());
-        for(int i=0; i<mAdapter.getCount(); ++i) {
-            models.add(mAdapter.getItem(i));
+        try {
+            final ArrayList<DumbModel> models = new ArrayList<>(mAdapter.getCount());
+            for (int i = 0; i < mAdapter.getCount(); ++i) {
+                models.add(mAdapter.getItem(i));
+            }
+            bundle.putParcelableArrayList(EXTRA_ITEMS, models);
+            bundle.putInt(EXTRA_CURRENT_INDEX, mViewHolder.getItemSwitcher().getDisplayedChild());
+        }catch (NullPointerException ex){
+            ex.printStackTrace();
         }
-        bundle.putParcelableArrayList(EXTRA_ITEMS, models);
-        bundle.putInt(EXTRA_CURRENT_INDEX, mViewHolder.getItemSwitcher().getDisplayedChild());
     }
 
     @Override
