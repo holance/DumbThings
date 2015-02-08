@@ -11,14 +11,19 @@
 
 package org.lunci.dumbthing.util;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 
 import org.lunci.dumbthing.BuildConfig;
 import org.lunci.dumbthing.R;
 import org.lunci.dumbthing.activity.SettingsActivity;
+import org.lunci.dumbthing.dataModel.GlobalMessages;
 import org.lunci.dumbthing.preference.PreferencesTracker;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by Lunci on 2/2/2015.
@@ -49,6 +54,37 @@ public class Utils {
         return null;
     }
 
+    public static void autoShareText(final Context context, final String text){
+        final AlertDialog.Builder builder= new AlertDialog.Builder(context);
+        builder.setIcon(R.drawable.ic_share_auto);
+        builder.setCancelable(true);
+        builder.setTitle(R.string.share_to_linked_accounts);
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                EventBus.getDefault().post(new GlobalMessages.PostContent(text));
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        String message="";
+        if(PreferencesTracker.getInstance().isFacebookLinked()){
+            message+="Facebook;";
+        }
+        if(PreferencesTracker.getInstance().isTwitterLinked()){
+            message+="Twitter;";
+        }
+        if(PreferencesTracker.getInstance().isGooglePlusLinked()){
+            message+="Google Plus;";
+        }
+        builder.setMessage(message);
+        builder.create().show();
+        
+    }
 
     public static String buildDumbContent(String orgContent){
         final PreferencesTracker pref=PreferencesTracker.getInstance();

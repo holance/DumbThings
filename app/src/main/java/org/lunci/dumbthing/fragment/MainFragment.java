@@ -71,7 +71,7 @@ public class MainFragment extends ServiceFragmentBase {
                                 mHandler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Utils.shareText(getActivity(), model.getContent());
+                                        Utils.autoShareText(getActivity(), model.getContent());
                                     }
                                 });
                                 succ = true;

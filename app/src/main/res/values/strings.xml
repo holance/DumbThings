@@ -39,6 +39,7 @@
     <string name="link_google_plus_failed">Link Google plus failed.</string>
 
     <!--Settings-->
+    <string name="setting">Setting</string>
     <string name="share">Share</string>
     <string name="general">General</string>
     <string name="auto_share">Auto Sharing</string>
@@ -72,4 +73,7 @@
     <!--Error messages-->
     <string name="send_to_facebook_failed">Post on facebook failed. Please relink facebook.</string>
     <string name="send_to_twitter_failed">Post on twitter failed. Please relink twitter.</string>
+    
+    <!--Alert Info-->
+    <string name="share_to_linked_accounts">Post to linked accounts?</string>
 </resources>
