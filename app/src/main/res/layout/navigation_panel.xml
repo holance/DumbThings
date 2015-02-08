@@ -46,20 +46,30 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@drawable/ic_right"/>
-        <LinearLayout android:orientation="vertical"
+        <LinearLayout android:orientation="horizontal"
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
             android:gravity="center_vertical">
             <org.lunci.dumbthing.ui.RippleImageView
-                android:id="@+id/textView_share"
+                android:id="@+id/imageView_share"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_share"
+                android:scaleType="center"
                 android:background="@color/transparent"
-                android:padding="@dimen/textView_counter_padding"
+                android:padding="10dp"
                 res:rv_centered="true"
                 android:layout_gravity="center" />
-            
+            <org.lunci.dumbthing.ui.RippleImageView
+                android:id="@+id/imageView_auto_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_share_auto"
+                android:background="@color/transparent"
+                android:padding="10dp"
+                android:scaleType="center"
+                res:rv_centered="true"
+                android:layout_gravity="center" />
         </LinearLayout>
 
     </LinearLayout>

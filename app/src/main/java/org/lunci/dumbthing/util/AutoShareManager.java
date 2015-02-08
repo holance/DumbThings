@@ -39,9 +39,11 @@ import com.twitter.sdk.android.core.models.Tweet;
 
 import org.lunci.dumbthing.BuildConfig;
 import org.lunci.dumbthing.R;
+import org.lunci.dumbthing.preference.PreferencesTracker;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -49,8 +51,11 @@ import java.util.Set;
  * Created by Lunci on 2/4/2015.
  */
 public class AutoShareManager {
+    private static interface AutoShareCallback{
+        void onResult(String moduleName, boolean success);
+    }
     private static interface IAutoShare{
-        void post(String content);
+        void post(String content, AutoShareCallback callback);
         void onActivityResult(int requestCode, int resultCode, Intent data);
     }
     public final String PostFacebookModule;
@@ -59,12 +64,10 @@ public class AutoShareManager {
     private static final String TAG=AutoShareManager.class.getSimpleName();
     private Activity mActivity;
     private final HashMap<String, IAutoShare> mShareModules=new HashMap<>();
+    
     private class ShareTask extends AsyncTask<String, Integer, Boolean>{
         private final Set<String> mModuleSet;
-        public ShareTask(){
-            mModuleSet =null;
-        }
-        
+
         public ShareTask(Set<String> moduleList){
             mModuleSet =moduleList;
         }
@@ -75,16 +78,12 @@ public class AutoShareManager {
             int progress=0;
             int length;
             if(mModuleSet ==null){
-                length=mShareModules.size();
-                for(IAutoShare module: mShareModules.values()){
-                    module.post(params[0]);
-                    this.publishProgress(((int) (++progress / (float) length * 100)));
-                }
+                return false;
             }else{
                 length= mModuleSet.size();
                 for(String name: mModuleSet){
                     try {
-                        mShareModules.get(name).post(params[0]);
+                        mShareModules.get(name).post(params[0],mShareCallback);
                     }catch (NullPointerException ex){
                         ex.printStackTrace();
                     }
@@ -95,21 +94,45 @@ public class AutoShareManager {
         }
     }
     
+    private HashMap<String, Boolean> mPostSuccessSet=new HashMap<>();
+    private Set<String> mPendingPostSet=new HashSet<>();
+
+    private AutoShareCallback mShareCallback=new AutoShareCallback(){
+        @Override
+        public void onResult(String moduleName, boolean success) {
+            mPostSuccessSet.put(moduleName, success);
+            mPendingPostSet.remove(moduleName);
+            if(mPendingPostSet.size()==0){
+                for(boolean succ:mPostSuccessSet.values()){
+                    if(!succ){
+                        return;
+                    }
+                }
+                Toast.makeText(mActivity, R.string.share_to_linked_accounts_succeeded, Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+    
     public AutoShareManager(Activity activity){
         mActivity=activity;
         PostFacebookModule=activity.getResources().getString(R.string.facebook);
         PostTwitterModule=activity.getResources().getString(R.string.twitter);
-        mShareModules.put(PostFacebookModule, new ShareOnFacebook(activity));
-        mShareModules.put(PostTwitterModule, new ShareOnTwitter());
+        mShareModules.put(PostFacebookModule, new ShareOnFacebook(activity,PostFacebookModule));
+        mShareModules.put(PostTwitterModule, new ShareOnTwitter(PostTwitterModule));
         
     }
     
     public void shareAll(String content){
-        final ShareTask task=new ShareTask();
-        task.execute(content);
+        final Set<String> moduleSet= PreferencesTracker.getInstance().getAutoSharingAccounts();
+        shareOn(moduleSet, content);
     }
     
     public void shareOn(Set<String> moduleSet, String content){
+        mPendingPostSet.clear();
+        for(String s:moduleSet) {
+            mPendingPostSet.add(s);
+        }
+        mPostSuccessSet.clear();
         final ShareTask task=new ShareTask(moduleSet);
         task.execute(content);
     }
@@ -117,10 +140,13 @@ public class AutoShareManager {
     private class ShareOnFacebook implements IAutoShare{
         private final String TAG=ShareOnFacebook.class.getSimpleName();
         private final String[] PERMISSIONS;
+        private final String mName;
         private String mContent;
         private Session mCurrentSession;
+        private AutoShareCallback mCallback;
         
-        public ShareOnFacebook(Context context){
+        public ShareOnFacebook(Context context, String name){
+            mName=name;
             PERMISSIONS=context.getResources().getStringArray(R.array.facebook_permissions);
         }
         
@@ -133,7 +159,7 @@ public class AutoShareManager {
             return true;
         }
         
-        private Session.StatusCallback mCallback= new Session.StatusCallback() {
+        private Session.StatusCallback mSessionCallback= new Session.StatusCallback() {
             @Override
             public void call(Session session, SessionState sessionState, Exception e) {
                 if (BuildConfig.DEBUG) {
@@ -162,13 +188,14 @@ public class AutoShareManager {
         };
 
         @Override
-        public void post(final String content) {
+        public void post(final String content, AutoShareCallback callback) {
+            mCallback=callback;
             mContent=content;
             if(BuildConfig.DEBUG){
                 Log.i(TAG, "publishStoryOnFacebook");
             }
             mCurrentSession=Session.getActiveSession();
-            Session.OpenRequest openRequest = new Session.OpenRequest(mActivity).setPermissions(PERMISSIONS).setCallback(mCallback);
+            Session.OpenRequest openRequest = new Session.OpenRequest(mActivity).setPermissions(PERMISSIONS).setCallback(mSessionCallback);
             if(mCurrentSession==null) {
                 if(BuildConfig.DEBUG){
                     Log.i(TAG, "create new session");
@@ -203,44 +230,53 @@ public class AutoShareManager {
                 Log.e(TAG, "mCurrentSession is null");
             }
         }
-    }
-    
-    private void postContent(String content, Session session){
-        final Bundle postParams = new Bundle();
-        postParams.putString("message", content);
 
-        Request.Callback callback = new Request.Callback() {
-            public void onCompleted(Response response) {
-                if (BuildConfig.DEBUG) {
-                    Log.i(TAG, "post on facebook completed");
+        private void postContent(String content, Session session){
+            final Bundle postParams = new Bundle();
+            postParams.putString("message", content);
+
+            Request.Callback callback = new Request.Callback() {
+                public void onCompleted(Response response) {
+                    final FacebookRequestError error = response.getError();
+                    if (error != null) {
+                        Log.e(TAG, "post on facebook error:" + error.getErrorMessage());
+                        final Toast toast = Toast.makeText(mActivity, R.string.send_to_facebook_failed, Toast.LENGTH_SHORT);
+                        toast.show();
+                        mCallback.onResult(mName, false);
+                    }else{
+                        if (BuildConfig.DEBUG) {
+                            Log.i(TAG, "post on facebook completed");
+                        }
+                        mCallback.onResult(mName, true);
+                    }
                 }
-                final FacebookRequestError error = response.getError();
-                if (error != null) {
-                    Log.e(TAG, "post on facebook error:" + error.getErrorMessage());
-                    final Toast toast = Toast.makeText(mActivity, R.string.send_to_facebook_failed, Toast.LENGTH_SHORT);
-                    toast.show();
-                }
+            };
+
+            final Request request = new Request(session, "me/feed", postParams,
+                    HttpMethod.POST, callback);
+            if (BuildConfig.DEBUG) {
+                Log.i(TAG, "start publishing");
             }
-        };
+            final RequestAsyncTask task = new RequestAsyncTask(request);
+            task.execute();
 
-        final Request request = new Request(session, "me/feed", postParams,
-                HttpMethod.POST, callback);
-        if (BuildConfig.DEBUG) {
-            Log.i(TAG, "start publishing");
         }
-        final RequestAsyncTask task = new RequestAsyncTask(request);
-        task.execute();
-        
     }
-    
-    
+
     private class ShareOnTwitter implements IAutoShare{
         private final String TAG=ShareOnTwitter.class.getSimpleName();
         private TwitterSession mCurrentSession;
         private String mContent;
+        private AutoShareCallback mCallback;
+        private final String mName;
+        
+        public ShareOnTwitter(String name){
+            mName=name;
+        }
         
         @Override
-        public void post(final String content) {
+        public void post(final String content, AutoShareCallback callback) {
+            mCallback=callback;
             mContent=content;
             if(BuildConfig.DEBUG){
                 Log.i(TAG, "publishStoryOnTwitter:"+content);
@@ -280,8 +316,9 @@ public class AutoShareManager {
                         @Override
                         public void success(Result result) {
                             if(BuildConfig.DEBUG){
-                                Log.w(TAG, "twitter post succeeded");
+                                Log.i(TAG, "twitter post succeeded");
                             }
+                            mCallback.onResult(mName, true);
                         }
 
                         @Override
@@ -291,10 +328,12 @@ public class AutoShareManager {
                                 e.printStackTrace();
                             }
                             if(e.getMessage().startsWith("403")){//post duplicated tweet is forbidden by twitter.
+                                mCallback.onResult(mName, true);
                                 return;
                             }else {
                                 final Toast toast = Toast.makeText(mActivity, R.string.send_to_twitter_failed, Toast.LENGTH_SHORT);
                                 toast.show();
+                                mCallback.onResult(mName, false);
                             }
                         }
                     });

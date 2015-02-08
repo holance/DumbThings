@@ -70,10 +70,14 @@
     <string name="auto_sharing_on_accounts_summary">Selected account will be used to share dumb things once clicked auto sharing button.</string>
     <string name="facebook">Facebook</string>
     <string name="twitter">Twitter</string>
+    <string name="google_plus">Google Plus</string>
     <!--Error messages-->
     <string name="send_to_facebook_failed">Post on facebook failed. Please relink facebook.</string>
     <string name="send_to_twitter_failed">Post on twitter failed. Please relink twitter.</string>
     
     <!--Alert Info-->
     <string name="share_to_linked_accounts">Post to linked accounts?</string>
+    <string name="share_to_linked_accounts_succeeded">Successfully post to all accounts!</string>
+    <string name="please_link_at_least_one">Please link at least one account to use auto sharing.</string>
+    <string name="please_set_at_least_one">Please enable at least one account in setting to use auto sharing.</string>
 </resources>

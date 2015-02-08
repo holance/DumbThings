@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.lunci.dumbthing.BuildConfig;
 import org.lunci.dumbthing.R;
@@ -55,35 +56,42 @@ public class Utils {
     }
 
     public static void autoShareText(final Context context, final String text){
-        final AlertDialog.Builder builder= new AlertDialog.Builder(context);
-        builder.setIcon(R.drawable.ic_share_auto);
-        builder.setCancelable(true);
-        builder.setTitle(R.string.share_to_linked_accounts);
-        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                EventBus.getDefault().post(new GlobalMessages.PostContent(text));
-            }
-        });
-        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        final PreferencesTracker pref=PreferencesTracker.getInstance();
+        if(!pref.isGooglePlusLinked() && !pref.isFacebookLinked() && !pref.isTwitterLinked()){
+            Toast.makeText(context, R.string.please_link_at_least_one, Toast.LENGTH_SHORT).show();
+        }else if(pref.getAutoSharingAccounts().size()==0){
+            Toast.makeText(context, R.string.please_set_at_least_one, Toast.LENGTH_SHORT).show();
+        }else {
+            
+            final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setIcon(R.drawable.ic_share_auto);
+            builder.setCancelable(true);
+            builder.setTitle(R.string.share_to_linked_accounts);
+            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    EventBus.getDefault().post(new GlobalMessages.PostContent(text));
+                }
+            });
+            builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
+                }
+            });
+            String message = "";
+            if (pref.isFacebookEnabled()) {
+                message += "Facebook; ";
             }
-        });
-        String message="";
-        if(PreferencesTracker.getInstance().isFacebookLinked()){
-            message+="Facebook;";
+            if (pref.isTwitterEnabled()) {
+                message += "Twitter; ";
+            }
+            if (pref.isGooglePlusEnabled()) {
+                message += "Google Plus; ";
+            }
+            builder.setMessage(message);
+            builder.create().show();
         }
-        if(PreferencesTracker.getInstance().isTwitterLinked()){
-            message+="Twitter;";
-        }
-        if(PreferencesTracker.getInstance().isGooglePlusLinked()){
-            message+="Google Plus;";
-        }
-        builder.setMessage(message);
-        builder.create().show();
-        
     }
 
     public static String buildDumbContent(String orgContent){

@@ -36,6 +36,33 @@ public class PreferencesTracker implements SharedPreferences.OnSharedPreferenceC
     public boolean isFacebookLinked() {
         return mFacebookLinked;
     }
+    
+    public boolean isFacebookEnabled(){
+        for(String s:mAutoSharingAccounts){
+            if(s.equals(mFacebookString)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isTwitterEnabled(){
+        for(String s:mAutoSharingAccounts){
+            if(s.equals(mTwitterString)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isGooglePlusEnabled(){
+        for(String s:mAutoSharingAccounts){
+            if(s.equals(mGooglePlusString)){
+                return true;
+            }
+        }
+        return false;
+    }
 
     public boolean isGooglePlusLinked() {
         return mGooglePlusLinked;
@@ -53,16 +80,22 @@ public class PreferencesTracker implements SharedPreferences.OnSharedPreferenceC
     private boolean mFacebookLinked=false;
     private boolean mGooglePlusLinked=false;
     private boolean mTwitterLinked=false;
+    private String mFacebookString;
+    private String mTwitterString;
+    private String mGooglePlusString;
     
     private Set<String> mAutoSharingAccounts;
 
     protected PreferencesTracker() {
-        mAutoSharingAccounts =new HashSet<String>();
+        mAutoSharingAccounts =new HashSet<>();
         final Context context=DumbThingsApp.getContext();
         final String[] autoSharingOptions=context.getResources().getStringArray(R.array.auto_sharing_array);
         for(String s:autoSharingOptions) {
             mAutoSharingAccounts.add(s);
         }
+        mFacebookString=context.getString(R.string.facebook);
+        mTwitterString=context.getString(R.string.twitter);
+        mGooglePlusString=context.getString(R.string.google_plus);
     }
 
     public static PreferencesTracker getInstance() {
