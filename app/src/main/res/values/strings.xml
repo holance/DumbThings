@@ -41,6 +41,7 @@
     <!--Settings-->
     <string name="share">Share</string>
     <string name="general">General</string>
+    <string name="auto_share">Auto Sharing</string>
     <string name="preference_enable_prefix">Enable Auto Prefix.</string>
     <string name="preference_enable_prefix_summary">Append prefix automatically at front.</string>
     <string name="preference_enable_suffix">Enable Auto Suffix.</string>
@@ -64,6 +65,10 @@
     <string name="about_string">About</string>
     <string name="rate_this_app_string">Rate it!</string>
     
+    <string name="auto_sharing_on_accounts">Auto Sharing on Accounts</string>
+    <string name="auto_sharing_on_accounts_summary">Selected account will be used to share dumb things once clicked auto sharing button.</string>
+    <string name="facebook">Facebook</string>
+    <string name="twitter">Twitter</string>
     <!--Error messages-->
     <string name="send_to_facebook_failed">Post on facebook failed. Please relink facebook.</string>
     <string name="send_to_twitter_failed">Post on twitter failed. Please relink twitter.</string>

@@ -11,5 +11,8 @@
   -->
 
 <resources>
-
+    <string-array name="auto_sharing_array">
+        <item>Facebook</item>
+        <item>Twitter</item>
+    </string-array>
 </resources>

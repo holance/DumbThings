@@ -20,6 +20,7 @@ import org.lunci.dumbthing.fragment.FunctionFragment;
 import org.lunci.dumbthing.fragment.ItemListFragment;
 import org.lunci.dumbthing.fragment.MainDisplayFragment;
 import org.lunci.dumbthing.fragment.MainFragment;
+import org.lunci.dumbthing.preference.PreferencesTracker;
 import org.lunci.dumbthing.service.AsyncMessage;
 import org.lunci.dumbthing.util.AutoShareManager;
 import org.lunci.dumbthing.util.Utils;
@@ -131,8 +132,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onEventMainThread(GlobalMessages.PostContent content){
-       // mAutoShareManager.shareOn(new String[]{AutoShareManager.PostFacebookModule}, content.Content);
-        mAutoShareManager.shareOn(new String[]{AutoShareManager.PostTwitterModule}, content.Content);
+        mAutoShareManager.shareOn(PreferencesTracker.getInstance().getAutoSharingAccounts(), content.Content);
     }
 
     @Override

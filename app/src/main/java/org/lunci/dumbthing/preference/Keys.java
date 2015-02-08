@@ -24,4 +24,6 @@ public class Keys {
     public static final String Preference_Facebook_Linked="preference_facebook_linked";
     public static final String Preference_Twitter_Linked="preference_twitter_linked";
     public static final String Preference_Google_Plus_Linked="preference_google_plus_linked";
+    
+    public static final String Preference_Auto_Sharing_Accounts="preference_auto_sharing_accounts";
 }

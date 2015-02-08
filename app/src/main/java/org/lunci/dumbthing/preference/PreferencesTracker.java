@@ -11,10 +11,14 @@
 
 package org.lunci.dumbthing.preference;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 
 import org.lunci.dumbthing.R;
 import org.lunci.dumbthing.app.DumbThingsApp;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -40,13 +44,25 @@ public class PreferencesTracker implements SharedPreferences.OnSharedPreferenceC
     public boolean isTwitterLinked() {
         return mTwitterLinked;
     }
+    
+    public Set<String> getAutoSharingAccounts(){
+        return mAutoSharingAccounts;
+        
+    }
 
     private boolean mFacebookLinked=false;
     private boolean mGooglePlusLinked=false;
     private boolean mTwitterLinked=false;
+    
+    private Set<String> mAutoSharingAccounts;
 
     protected PreferencesTracker() {
-
+        mAutoSharingAccounts =new HashSet<String>();
+        final Context context=DumbThingsApp.getContext();
+        final String[] autoSharingOptions=context.getResources().getStringArray(R.array.auto_sharing_array);
+        for(String s:autoSharingOptions) {
+            mAutoSharingAccounts.add(s);
+        }
     }
 
     public static PreferencesTracker getInstance() {
@@ -116,6 +132,10 @@ public class PreferencesTracker implements SharedPreferences.OnSharedPreferenceC
         } else {
             sharedPreferences.edit().putBoolean(Keys.Preference_Enable_Auto_Share, mEnableAutoShare).commit();
         }
+        
+        if(sharedPreferences.contains(Keys.Preference_Auto_Sharing_Accounts)){
+            mAutoSharingAccounts=sharedPreferences.getStringSet(Keys.Preference_Auto_Sharing_Accounts, mAutoSharingAccounts);
+        }
 
         mFacebookLinked=sharedPreferences.getBoolean(Keys.Preference_Facebook_Linked, false);
         mGooglePlusLinked=sharedPreferences.getBoolean(Keys.Preference_Google_Plus_Linked, false);
@@ -142,6 +162,8 @@ public class PreferencesTracker implements SharedPreferences.OnSharedPreferenceC
             mFacebookLinked=sharedPreferences.getBoolean(Keys.Preference_Google_Plus_Linked, false);
         }else if(key.equals(Keys.Preference_Twitter_Linked)){
             mFacebookLinked=sharedPreferences.getBoolean(Keys.Preference_Twitter_Linked, false);
+        }else if(key.equals(Keys.Preference_Auto_Sharing_Accounts)){
+            mAutoSharingAccounts=sharedPreferences.getStringSet(Keys.Preference_Auto_Sharing_Accounts, mAutoSharingAccounts);
         }
     }
 }

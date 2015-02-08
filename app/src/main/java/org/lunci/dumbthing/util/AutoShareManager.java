@@ -43,6 +43,7 @@ import org.lunci.dumbthing.R;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Lunci on 2/4/2015.
@@ -52,20 +53,20 @@ public class AutoShareManager {
         void post(String content);
         void onActivityResult(int requestCode, int resultCode, Intent data);
     }
-    public static final String PostFacebookModule="facebook";
-    public static final String PostTwitterModule="twitter";
+    public final String PostFacebookModule;
+    public final String PostTwitterModule;
     
     private static final String TAG=AutoShareManager.class.getSimpleName();
     private Activity mActivity;
     private final HashMap<String, IAutoShare> mShareModules=new HashMap<>();
     private class ShareTask extends AsyncTask<String, Integer, Boolean>{
-        private final String[] mModuleList;
+        private final Set<String> mModuleSet;
         public ShareTask(){
-            mModuleList=null;
+            mModuleSet =null;
         }
         
-        public ShareTask(String[] moduleList){
-            mModuleList=moduleList;
+        public ShareTask(Set<String> moduleList){
+            mModuleSet =moduleList;
         }
         @Override
         protected Boolean doInBackground(String... params) {
@@ -73,15 +74,15 @@ public class AutoShareManager {
                 return false;
             int progress=0;
             int length;
-            if(mModuleList==null){
+            if(mModuleSet ==null){
                 length=mShareModules.size();
                 for(IAutoShare module: mShareModules.values()){
                     module.post(params[0]);
                     this.publishProgress(((int) (++progress / (float) length * 100)));
                 }
             }else{
-                length=mModuleList.length;
-                for(String name:mModuleList){
+                length= mModuleSet.size();
+                for(String name: mModuleSet){
                     try {
                         mShareModules.get(name).post(params[0]);
                     }catch (NullPointerException ex){
@@ -96,8 +97,11 @@ public class AutoShareManager {
     
     public AutoShareManager(Activity activity){
         mActivity=activity;
+        PostFacebookModule=activity.getResources().getString(R.string.facebook);
+        PostTwitterModule=activity.getResources().getString(R.string.twitter);
         mShareModules.put(PostFacebookModule, new ShareOnFacebook(activity));
         mShareModules.put(PostTwitterModule, new ShareOnTwitter());
+        
     }
     
     public void shareAll(String content){
@@ -105,8 +109,8 @@ public class AutoShareManager {
         task.execute(content);
     }
     
-    public void shareOn(String[] moduleList, String content){
-        final ShareTask task=new ShareTask(moduleList);
+    public void shareOn(Set<String> moduleSet, String content){
+        final ShareTask task=new ShareTask(moduleSet);
         task.execute(content);
     }
 
@@ -173,7 +177,7 @@ public class AutoShareManager {
                 if(BuildConfig.DEBUG){
                     Log.i(TAG, "session state="+mCurrentSession.getState());
                 }
-                if (SessionState.CREATED.equals(mCurrentSession.getState())){
+                if (SessionState.CREATED.equals(mCurrentSession.getState())||SessionState.CREATED_TOKEN_LOADED.equals(mCurrentSession.getState())){
                     Session.setActiveSession(mCurrentSession);
                     if(BuildConfig.DEBUG){
                         Log.i(TAG, "open session for publish");
@@ -286,8 +290,12 @@ public class AutoShareManager {
                                 Log.w(TAG, "twitter post failed:"+e.getMessage());
                                 e.printStackTrace();
                             }
-                            final Toast toast=Toast.makeText(mActivity, R.string.send_to_twitter_failed, Toast.LENGTH_SHORT);
-                            toast.show();
+                            if(e.getMessage().startsWith("403")){//post duplicated tweet is forbidden by twitter.
+                                return;
+                            }else {
+                                final Toast toast = Toast.makeText(mActivity, R.string.send_to_twitter_failed, Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
                         }
                     });
         }

@@ -10,6 +10,13 @@
   -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/general">
+        <CheckBoxPreference
+            android:key="preference_enable_auto_share_pop"
+            android:title="@string/preference_enable_auto_share"
+            android:summary="@string/preference_enable_auto_share_summary"
+            android:defaultValue="true" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/share">
         <CheckBoxPreference
             android:key="preference_enable_prefix"
@@ -43,12 +50,15 @@
             android:singleLine="true"
             android:maxLines="1" />
     </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/general">
-        <CheckBoxPreference
-            android:key="preference_enable_auto_share_pop"
-            android:title="@string/preference_enable_auto_share"
-            android:summary="@string/preference_enable_auto_share_summary"
-            android:defaultValue="true" />
+    <PreferenceCategory android:title="@string/auto_share">
+        <MultiSelectListPreference
+            android:dialogTitle="@string/auto_sharing_on_accounts"
+            android:key="preference_auto_sharing_accounts"
+            android:summary="@string/auto_sharing_on_accounts_summary"
+            android:title="@string/auto_sharing_on_accounts"
+            android:entries="@array/auto_sharing_array"
+            android:entryValues="@array/auto_sharing_array"
+            android:defaultValue="@array/auto_sharing_array"
+            ></MultiSelectListPreference>
     </PreferenceCategory>
 </PreferenceScreen>
