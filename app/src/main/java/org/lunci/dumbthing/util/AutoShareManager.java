@@ -248,28 +248,26 @@ public class AutoShareManager {
                 }
                 postContent();
             }else {
-                if(BuildConfig.DEBUG){
-                    Log.i(TAG, "start login twitter");
-                }
+                Log.w(TAG, "get twitter session failed");
              //   Twitter.logIn(mActivity, mCallback);
             }
         }
-        
-        private com.twitter.sdk.android.core.Callback<TwitterSession> mCallback=new com.twitter.sdk.android.core.Callback<TwitterSession>(){
-
-            @Override
-            public void success(Result result) {
-                mCurrentSession=(TwitterSession)result.data;
-                postContent();
-            }
-
-            @Override
-            public void failure(TwitterException e) {
-                Log.w(TAG, "Log into twitter failed:"+e.getMessage());
-                final Toast toast=Toast.makeText(mActivity, R.string.send_to_twitter_failed, Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        };
+//
+//        private com.twitter.sdk.android.core.Callback<TwitterSession> mCallback=new com.twitter.sdk.android.core.Callback<TwitterSession>(){
+//
+//            @Override
+//            public void success(Result result) {
+//                mCurrentSession=(TwitterSession)result.data;
+//                postContent();
+//            }
+//
+//            @Override
+//            public void failure(TwitterException e) {
+//                Log.w(TAG, "Log into twitter failed:"+e.getMessage());
+//                final Toast toast=Toast.makeText(mActivity, R.string.send_to_twitter_failed, Toast.LENGTH_SHORT);
+//                toast.show();
+//            }
+//        };
         
         private void postContent(){
             Twitter.getInstance().core.getApiClient().getStatusesService()
