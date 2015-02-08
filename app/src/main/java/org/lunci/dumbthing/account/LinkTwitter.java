@@ -91,6 +91,8 @@ public class LinkTwitter extends LinkAccountBase {
             public void onClick(DialogInterface dialog, int which) {
                 Twitter.getSessionManager().clearActiveSession();
                 Twitter.logOut();
+                PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putBoolean(Keys.Preference_Twitter_Linked,false).commit();
+                mButtonContainer.updateLinked(false);
             }
         });
     }
