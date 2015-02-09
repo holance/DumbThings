@@ -26,12 +26,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.lunci.dumbthing.R;
-import org.lunci.dumbthing.dataModel.GlobalMessages;
 import org.lunci.dumbthing.dialog.CalendarDialog;
 import org.lunci.dumbthing.service.DataServiceMessages;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,12 +57,6 @@ public class FunctionFragment extends ServiceFragmentBase {
                         try{
                             final ArrayList<String> dates=(ArrayList<String>)msg.obj;
                             final CalendarDialog calendarDialog = CalendarDialog.newInstance(dates);
-                            calendarDialog.setCallbacks(new CalendarDialog.CalendarDialogCallbacks() {
-                                @Override
-                                public void onDateSelected(Date date) {
-                                    getEventBus().post(Message.obtain(null, GlobalMessages.MESSAGE_ON_DATE_SELECTED, -1,-1,date));
-                                }
-                            });
                             mHandler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {

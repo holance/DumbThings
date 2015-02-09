@@ -25,7 +25,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import org.lunci.dumbthing.BuildConfig;
 import org.lunci.dumbthing.R;
@@ -155,7 +154,7 @@ public class MainFragment extends ServiceFragmentBase {
 
         mViewHolder.setRippleTextView((RippleTextView) rootView.findViewById(R.id.textView_counter));
         mViewHolder.setAddDumbButton(rootView.findViewById(R.id.textView_add_dumb));
-        mViewHolder.setPostButton((ImageView) rootView.findViewById(R.id.imageView_link_share));
+
         try {
             mViewHolder.setup();
         } catch (NullPointerException ex) {
@@ -174,17 +173,8 @@ public class MainFragment extends ServiceFragmentBase {
         private static final int DELAY = 400;
         private RippleTextView mRippleCounter;
         private View mAddDumbButton;
-        private ImageView mPostButton;
 
         public ViewHolder() {
-        }
-
-        public ImageView getPostButton() {
-            return mPostButton;
-        }
-
-        public void setPostButton(ImageView postButton) {
-            this.mPostButton = postButton;
         }
 
         public RippleTextView getRippleTextView() {
@@ -213,7 +203,6 @@ public class MainFragment extends ServiceFragmentBase {
                         @Override
                         public void run() {
                             final AddDumbThingDialog dialog = new AddDumbThingDialog();
-                            dialog.setCallbacks(new AddDumbThingCallbacksHandler());
                             dialog.show(getFragmentManager(), AddDumbThingDialog.class.getSimpleName());
                             mAddDumbButton.setEnabled(true);
                         }
@@ -235,34 +224,18 @@ public class MainFragment extends ServiceFragmentBase {
                     }, DELAY);
                 }
             });
-
-            mPostButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getEventBus().post(new GlobalMessages.PostContent("test"));
-                }
-            });
         }
     }
 
-
-    private final class AddDumbThingCallbacksHandler implements AddDumbThingDialog.AddDumbThingDialogCallbacks {
-        @Override
-        public void onConfirmed(String text) {
-            if (text == null || text.isEmpty()) {
-                return;
-            }
-            ++mDumbCount;
-            mViewHolder.getRippleTextView().setTextRipple(String.valueOf(mDumbCount));
-            final DumbModel model = new DumbModel();
-            model.setContent(text);
-            final Message msg = Message.obtain(null, DataServiceMessages.Service_Add_Item, -1, -1, model);
-            sendMessageToService(msg);
+    public void onEventMainThread(AddDumbThingDialog.AddDumbThingDialogCallback callback){
+        if (callback.getText() == null || callback.getText().isEmpty()) {
+            return;
         }
-
-        @Override
-        public void onCanceled() {
-
-        }
+        ++mDumbCount;
+        mViewHolder.getRippleTextView().setTextRipple(String.valueOf(mDumbCount));
+        final DumbModel model = new DumbModel();
+        model.setContent(callback.getText());
+        final Message msg = Message.obtain(null, DataServiceMessages.Service_Add_Item, -1, -1, model);
+        sendMessageToService(msg);
     }
 }

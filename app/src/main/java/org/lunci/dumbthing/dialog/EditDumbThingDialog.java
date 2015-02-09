@@ -16,7 +16,6 @@
 
 package org.lunci.dumbthing.dialog;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.os.Bundle;
@@ -33,29 +32,42 @@ import android.widget.TextView;
 import org.lunci.dumbthing.R;
 import org.lunci.dumbthing.dataModel.DumbModel;
 
+import de.greenrobot.event.EventBus;
+
 /**
  * Created by Lunci on 2/2/2015.
  */
 public class EditDumbThingDialog extends DialogFragment{
-    public interface EditDumbThingDialogCallbacks{
-        void onConfirmed(long id, ContentValues updatedValues, int position);
-        void onCanceled();
+    public static class EditDumbThingDialogCallbacks{
+        private final long mId;
+        private final ContentValues mUpdatedValues;
+        private final int mPosition;
+        public EditDumbThingDialogCallbacks(long id, ContentValues updatedValues, int position){
+            mId=id;
+            mUpdatedValues=updatedValues;
+            mPosition=position;
+            
+        }
+        
+        public long getId(){
+            return mId;
+            
+        }
+        
+        public ContentValues getUpdatedValues(){
+            return mUpdatedValues;
+            
+        }
+        
+        public int getPosition(){
+            return mPosition;
+            
+        }
     }
     private static final String EXTRA_POSITION="extra_item_position";
     private static final String EXTRA_ITEM="extra_item";
     private static final String EXTRA_CONTENT="extra_content";
-    private static final EditDumbThingDialogCallbacks DummyCallbacks=new EditDumbThingDialogCallbacks() {
-        @Override
-        public void onConfirmed(long id, ContentValues updatedValues, int position) {
 
-        }
-
-        @Override
-        public void onCanceled() {
-
-        }
-    };
-    private EditDumbThingDialogCallbacks mCallbacks=DummyCallbacks;
     private EditText mEditText;
     private DumbModel mModel;
     private int mPosition;
@@ -99,7 +111,7 @@ public class EditDumbThingDialog extends DialogFragment{
                 if(EditorInfo.IME_ACTION_DONE==actionId){
                     final ContentValues updatedValues=new ContentValues();
                     updatedValues.put(DumbModel.Content_Field, mEditText.getText().toString());
-                    mCallbacks.onConfirmed(mModel.getId(), updatedValues, mPosition);
+                    EventBus.getDefault().post(new EditDumbThingDialogCallbacks(mModel.getId(), updatedValues, mPosition));
                     dismiss();
                     return true;
                 }
@@ -111,7 +123,7 @@ public class EditDumbThingDialog extends DialogFragment{
             public void onClick(View v) {
                 final ContentValues updatedValues=new ContentValues();
                 updatedValues.put(DumbModel.Content_Field, mEditText.getText().toString());
-                mCallbacks.onConfirmed(mModel.getId(), updatedValues, mPosition);
+                EventBus.getDefault().post(new EditDumbThingDialogCallbacks(mModel.getId(), updatedValues, mPosition));
                 dismiss();
             }
         });
@@ -119,7 +131,6 @@ public class EditDumbThingDialog extends DialogFragment{
 
             @Override
             public void onClick(View v) {
-                mCallbacks.onCanceled();
                 dismiss();
             }
         });
@@ -142,23 +153,5 @@ public class EditDumbThingDialog extends DialogFragment{
         outBundle.putString(EXTRA_CONTENT, mEditText.getText().toString());
         outBundle.putParcelable(EXTRA_ITEM, mModel);
         outBundle.putInt(EXTRA_POSITION, mPosition);
-    }
-
-    public void setCallbacks(EditDumbThingDialogCallbacks callbacks){
-        mCallbacks=callbacks;
-    }
-
-    @Override
-    public void onAttach(Activity activity){
-        super.onAttach(activity);
-        if(activity instanceof EditDumbThingDialogCallbacks){
-            mCallbacks=(EditDumbThingDialogCallbacks)activity;
-        }
-    }
-
-    @Override
-    public void onDetach(){
-        mCallbacks=DummyCallbacks;
-        super.onDetach();
     }
 }

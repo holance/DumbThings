@@ -11,7 +11,6 @@
 
 package org.lunci.dumbthing.dialog;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -30,22 +29,26 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
+
 /**
  * Created by Lunci on 2/3/2015.
  */
 public class CalendarDialog extends DialogFragment {
     public static final String EXTRA_DATES="extra_dates";
 
-    public interface CalendarDialogCallbacks{
-        void onDateSelected(Date date);
-    }
-
-    private static final CalendarDialogCallbacks DummyCallbacks=new CalendarDialogCallbacks() {
-        @Override
-        public void onDateSelected(Date date) {
-
+    public static class CalendarDialogCallbacks{
+        private final Date mSelectedDate;
+        public CalendarDialogCallbacks(Date date){
+            mSelectedDate=date;
+            
         }
-    };
+        
+        public Date getSelectedDate(){
+            return mSelectedDate;
+            
+        }
+    }
 
     public static CalendarDialog newInstance(ArrayList<String> availableDates){
         final CalendarDialog dialog=new CalendarDialog();
@@ -56,7 +59,6 @@ public class CalendarDialog extends DialogFragment {
     }
 
     private ArrayList<Date> mDates;
-    private CalendarDialogCallbacks mCallbacks=DummyCallbacks;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -88,7 +90,7 @@ public class CalendarDialog extends DialogFragment {
             calendar.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
                 @Override
                 public void onDateSelected(Date date) {
-                    mCallbacks.onDateSelected(date);
+                    EventBus.getDefault().post(new CalendarDialogCallbacks(date));
                     dismiss();
                 }
 
@@ -115,21 +117,4 @@ public class CalendarDialog extends DialogFragment {
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public void onAttach(Activity activity){
-        super.onAttach(activity);
-        if(activity instanceof CalendarDialogCallbacks){
-            mCallbacks=(CalendarDialogCallbacks)activity;
-        }
-    }
-
-    @Override
-    public void onDetach(){
-        mCallbacks=DummyCallbacks;
-        super.onDetach();
-    }
-
-    public void setCallbacks(CalendarDialogCallbacks callbacks){
-        mCallbacks=callbacks;
-    }
 }

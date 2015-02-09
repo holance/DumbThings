@@ -17,7 +17,6 @@
 package org.lunci.dumbthing.fragment;
 
 import android.content.ComponentName;
-import android.content.ContentValues;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -37,6 +36,7 @@ import org.lunci.dumbthing.R;
 import org.lunci.dumbthing.adapter.DumbItemListAdapter;
 import org.lunci.dumbthing.dataModel.DumbModel;
 import org.lunci.dumbthing.dataModel.GlobalMessages;
+import org.lunci.dumbthing.dialog.CalendarDialog;
 import org.lunci.dumbthing.dialog.EditDumbThingDialog;
 import org.lunci.dumbthing.service.DataServiceMessages;
 import org.lunci.dumbthing.util.DateTimeHelper;
@@ -78,13 +78,6 @@ public class ItemListFragment extends ServiceFragmentBase implements AbsListView
                         } catch (ClassCastException ex) {
                             ex.printStackTrace();
                         }
-                    }
-                    break;
-                case GlobalMessages.MESSAGE_ON_DATE_SELECTED:
-                    if (msg.obj instanceof Date) {
-                        final Date date = (Date) msg.obj;
-                        findItemByDate(date);
-                        succ=true;
                     }
                     break;
                 case DataServiceMessages.Service_Remove_Item_Finished:
@@ -187,26 +180,21 @@ public class ItemListFragment extends ServiceFragmentBase implements AbsListView
             Log.i(TAG, "onItemClick, position=" + position);
         }
         final EditDumbThingDialog dialog=EditDumbThingDialog.newInstance(mAdapter.getItem(position), position);
-        dialog.setCallbacks(mEditDumbThingDialogCallbacks);
         dialog.show(getFragmentManager(), EditDumbThingDialog.class.getSimpleName());
     }
     
-    private EditDumbThingDialog.EditDumbThingDialogCallbacks mEditDumbThingDialogCallbacks=new EditDumbThingDialog.EditDumbThingDialogCallbacks(){
+    public void onEventMainThread(EditDumbThingDialog.EditDumbThingDialogCallbacks callbacks){
+        mAdapter.getItem(callbacks.getPosition()).setContent(callbacks.getUpdatedValues().getAsString(DumbModel.Content_Field));
+        final Bundle bundle=new Bundle();
+        bundle.putLong(DataServiceMessages.EXTRA_ID, callbacks.getId());
+        bundle.putParcelable(DataServiceMessages.EXTRA_CONTENTVALUES, callbacks.getUpdatedValues());
+        sendMessageToService(Message.obtain(null, DataServiceMessages.Service_Modify_Item, -1, -1, bundle));
+    }
 
-        @Override
-        public void onConfirmed(long id, ContentValues updatedValues, int position) {
-            mAdapter.getItem(position).setContent(updatedValues.getAsString(DumbModel.Content_Field));
-            final Bundle bundle=new Bundle();
-            bundle.putLong(DataServiceMessages.EXTRA_ID, id);
-            bundle.putParcelable(DataServiceMessages.EXTRA_CONTENTVALUES, updatedValues);
-            sendMessageToService(Message.obtain(null, DataServiceMessages.Service_Modify_Item, -1, -1, bundle));
-        }
-
-        @Override
-        public void onCanceled() {
-
-        }
-    };
+    public void onEventMainThread(CalendarDialog.CalendarDialogCallbacks callbacks){
+        if(callbacks.getSelectedDate()!=null)
+            findItemByDate(callbacks.getSelectedDate());
+    }
 
     @Override
     public void onItemEdit(final int position, final View view) {

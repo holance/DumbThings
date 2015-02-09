@@ -16,7 +16,6 @@ package org.lunci.dumbthing.dataModel;
  */
 public class GlobalMessages {
     public static final int MESSAGE_SHOW_ALL_DUMBS = 1000;
-    public static final int MESSAGE_ON_DATE_SELECTED=1001;
     
     public static class UpdateMainFragment{
         

@@ -16,7 +16,6 @@
 
 package org.lunci.dumbthing.dialog;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -31,27 +30,23 @@ import android.widget.TextView;
 
 import org.lunci.dumbthing.R;
 
+import de.greenrobot.event.EventBus;
+
 /**
  * Created by Lunci on 2/2/2015.
  */
 public class AddDumbThingDialog extends DialogFragment{
-    public interface AddDumbThingDialogCallbacks{
-        void onConfirmed(String text);
-        void onCanceled();
+    public class AddDumbThingDialogCallback{
+        public AddDumbThingDialogCallback(String text){
+            mText=text;
+        }
+        private final String mText;
+        public String getText(){
+            return mText;
+        }
     }
     private static final String EXTRA_CONTENT="extra_content";
-    private static final AddDumbThingDialogCallbacks DummyCallbacks=new AddDumbThingDialogCallbacks() {
-        @Override
-        public void onConfirmed(String text) {
 
-        }
-
-        @Override
-        public void onCanceled() {
-
-        }
-    };
-    private AddDumbThingDialogCallbacks mCallbacks=DummyCallbacks;
     private EditText mEditText;
 
     @Override
@@ -71,7 +66,7 @@ public class AddDumbThingDialog extends DialogFragment{
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(EditorInfo.IME_ACTION_DONE==actionId){
-                    mCallbacks.onConfirmed(mEditText.getText().toString());
+                    EventBus.getDefault().post(new AddDumbThingDialogCallback(mEditText.getText().toString()));
                     dismiss();
                     return true;
                 }
@@ -81,7 +76,7 @@ public class AddDumbThingDialog extends DialogFragment{
         view.findViewById(R.id.button_positive).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallbacks.onConfirmed(mEditText.getText().toString());
+                EventBus.getDefault().post(new AddDumbThingDialogCallback(mEditText.getText().toString()));
                 dismiss();
             }
         });
@@ -89,7 +84,6 @@ public class AddDumbThingDialog extends DialogFragment{
 
             @Override
             public void onClick(View v) {
-                mCallbacks.onCanceled();
                 dismiss();
             }
         });
@@ -110,23 +104,5 @@ public class AddDumbThingDialog extends DialogFragment{
     public void onSaveInstanceState(Bundle outBundle){
         super.onSaveInstanceState(outBundle);
         outBundle.putString(EXTRA_CONTENT, mEditText.getText().toString());
-    }
-
-    public void setCallbacks(AddDumbThingDialogCallbacks callbacks){
-        mCallbacks=callbacks;
-    }
-
-    @Override
-    public void onAttach(Activity activity){
-        super.onAttach(activity);
-        if(activity instanceof AddDumbThingDialogCallbacks){
-            mCallbacks=(AddDumbThingDialogCallbacks)activity;
-        }
-    }
-
-    @Override
-    public void onDetach(){
-        mCallbacks=DummyCallbacks;
-        super.onDetach();
     }
 }
