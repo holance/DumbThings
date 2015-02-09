@@ -11,9 +11,9 @@
 
 package org.lunci.dumbthing.account;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
 
@@ -33,22 +33,22 @@ public abstract class LinkAccountBase implements ILinkAccount{
     };
 
     protected LinkAccoutCallbacks mCallbacks=DummyCallbacks;
-    private final Context mContext;
+    private final Activity mActivity;
 
-    public LinkAccountBase(Context context, LinkAccoutCallbacks callbacks){
-        mContext=context;
+    public LinkAccountBase(Activity activity, LinkAccoutCallbacks callbacks){
+        mActivity=activity;
         mCallbacks=callbacks;
     }
 
-    protected Context getContext(){
-        return mContext;
+    protected Activity getActivity(){
+        return mActivity;
     }
 
     protected void callUnlinkConfirmDialog(int messageResId, DialogInterface.OnClickListener onConfirmListener){
         if(BuildConfig.DEBUG){
             Log.i(TAG, "callUnlinkConfirmDialog");
         }
-        final AlertDialog.Builder builder=new AlertDialog.Builder(mContext);
+        final AlertDialog.Builder builder=new AlertDialog.Builder(mActivity);
         builder.setCancelable(true);
         builder.setIcon(R.drawable.ic_warning);
         builder.setMessage(messageResId);

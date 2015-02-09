@@ -12,6 +12,7 @@
 package org.lunci.dumbthing.account;
 
 import android.content.Intent;
+import android.os.Bundle;
 
 /**
  * Created by Lunci on 2/6/2015.
@@ -26,4 +27,6 @@ public interface ILinkAccount {
     public void link(Object args);
     public void unlink();
     public void onLinkResult(int requestCode, int resultCode, Intent data);
+    public void onCreate(Bundle savedInstanceState);
+    public void onSaveInstanceState(Bundle outState);
 }

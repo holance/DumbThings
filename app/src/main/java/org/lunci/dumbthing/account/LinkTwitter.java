@@ -11,9 +11,10 @@
 
 package org.lunci.dumbthing.account;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -37,8 +38,8 @@ public class LinkTwitter extends LinkAccountBase {
 
     private LinkButtonContainer mButtonContainer;
 
-    public LinkTwitter(Context context, LinkAccoutCallbacks callbacks){
-        super(context, callbacks);
+    public LinkTwitter(Activity activity, LinkAccoutCallbacks callbacks){
+        super(activity, callbacks);
     }
 
     @Override
@@ -61,19 +62,19 @@ public class LinkTwitter extends LinkAccountBase {
         if(BuildConfig.DEBUG){
             Log.i(TAG, "link twitter");
         }
-        final TwitterLoginButton loginButton=new TwitterLoginButton(getContext());
+        final TwitterLoginButton loginButton=new TwitterLoginButton(getActivity());
         mButtonContainer.setLoginButton(loginButton);
         loginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> twitterSessionResult) {
-                PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putBoolean(Keys.Preference_Twitter_Linked,true).commit();
+                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean(Keys.Preference_Twitter_Linked,true).commit();
                 mButtonContainer.updateLinked(true);
                 mCallbacks.onLinked(true, R.string.link_twitter_succeed);
             }
 
             @Override
             public void failure(TwitterException e) {
-                PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putBoolean(Keys.Preference_Twitter_Linked,false).commit();
+                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean(Keys.Preference_Twitter_Linked,false).commit();
                 mButtonContainer.updateLinked(false);
                 mCallbacks.onLinked(false, R.string.link_twitter_failed);
             }
@@ -91,7 +92,7 @@ public class LinkTwitter extends LinkAccountBase {
             public void onClick(DialogInterface dialog, int which) {
                 Twitter.getSessionManager().clearActiveSession();
                 Twitter.logOut();
-                PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putBoolean(Keys.Preference_Twitter_Linked,false).commit();
+                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean(Keys.Preference_Twitter_Linked,false).commit();
                 mButtonContainer.updateLinked(false);
             }
         });
@@ -104,5 +105,15 @@ public class LinkTwitter extends LinkAccountBase {
         }catch (NullPointerException ex){
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
     }
 }

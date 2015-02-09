@@ -43,12 +43,12 @@ import org.lunci.dumbthing.util.Utils;
 public class LinkShareDialog extends DialogFragment {
     private static final String TAG = LinkShareDialog.class.getSimpleName();
     private final LinkAccountManager mManager = new LinkAccountManager();
-    private String mFacebookPublishPermission;
+    private static final String EXTRA_CURRENT_LINKER="extra_current_linker";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mFacebookPublishPermission = getResources().getString(R.string.facebook_publish_permission);
+        mManager.onCreate(savedInstanceState);
     }
 
     @Override
@@ -72,6 +72,12 @@ public class LinkShareDialog extends DialogFragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        mManager.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
     }
@@ -90,11 +96,6 @@ public class LinkShareDialog extends DialogFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 
     private enum CurrentMode {None, Facebook, Twitter, GooglePlus}
@@ -162,6 +163,42 @@ public class LinkShareDialog extends DialogFragment {
             mGooglePlusButton.getButton().setOnClickListener(mClickListener);
 
             mLinkedInButton.getButton().setOnClickListener(mClickListener);
+
+            if(mCurrentMode!=CurrentMode.None){
+                switch (mCurrentMode) {
+                    case Facebook:
+                        mAccountLinker.setButtonContainer(mFacebookButton);
+                        break;
+                    case Twitter:
+                        mAccountLinker.setButtonContainer(mTwitterButton);
+                        break;
+                    case GooglePlus:
+                        break;
+                }
+            }
+        }
+
+        public void onCreate(Bundle savedInstanceState){
+            if(savedInstanceState!=null) {
+                mCurrentMode=CurrentMode.valueOf(savedInstanceState.getString(EXTRA_CURRENT_LINKER));
+                switch (mCurrentMode){
+                    case Facebook:
+                        mAccountLinker = new LinkFacebook(getActivity(), LinkAccountManager.this);
+                        break;
+                    case Twitter:
+                        mAccountLinker = new LinkTwitter(getActivity(), LinkAccountManager.this);
+                        break;
+                    case GooglePlus:
+                        break;
+                }
+                if(mAccountLinker!=null)
+                    mAccountLinker.onCreate(savedInstanceState);
+            }
+        }
+
+        public void onSaveInstanceState(Bundle outState){
+            outState.putString(EXTRA_CURRENT_LINKER, mCurrentMode.name());
+            mAccountLinker.onSaveInstanceState(outState);
         }
 
         public void onActivityResult(int requestCode, int resultCode, Intent data) {

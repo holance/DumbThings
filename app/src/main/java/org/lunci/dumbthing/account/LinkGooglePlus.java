@@ -17,12 +17,8 @@
 package org.lunci.dumbthing.account;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 
@@ -32,16 +28,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.plus.Plus;
-import com.twitter.sdk.android.Twitter;
-import com.twitter.sdk.android.core.Callback;
-import com.twitter.sdk.android.core.Result;
-import com.twitter.sdk.android.core.TwitterException;
-import com.twitter.sdk.android.core.TwitterSession;
-import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import org.lunci.dumbthing.BuildConfig;
-import org.lunci.dumbthing.R;
-import org.lunci.dumbthing.preference.Keys;
 import org.lunci.dumbthing.preference.PreferencesTracker;
 
 /**
@@ -63,9 +51,9 @@ public class LinkGooglePlus extends LinkAccountBase implements GoogleApiClient.C
     private GoogleApiClient mGoogleApiClient;
     private boolean mIntentInProgress;
 
-    public LinkGooglePlus(Context context, LinkAccoutCallbacks callbacks){
-        super(context, callbacks);
-        mGoogleApiClient = new GoogleApiClient.Builder(context)
+    public LinkGooglePlus(Activity activity, LinkAccoutCallbacks callbacks){
+        super(activity, callbacks);
+        mGoogleApiClient = new GoogleApiClient.Builder(activity)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(Plus.API)
@@ -94,7 +82,7 @@ public class LinkGooglePlus extends LinkAccountBase implements GoogleApiClient.C
             Log.i(TAG, "link google plus");
         }
         mGoogleApiClient.connect();
-        SignInButton button=new SignInButton(getContext());
+        SignInButton button=new SignInButton(getActivity());
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,6 +123,16 @@ public class LinkGooglePlus extends LinkAccountBase implements GoogleApiClient.C
                 mGoogleApiClient.connect();
             }
         }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
     }
 
     /* A helper method to resolve the current ConnectionResult error. */

@@ -19,11 +19,14 @@ package org.lunci.dumbthing.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenSource;
 import com.facebook.FacebookRequestError;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
@@ -39,9 +42,12 @@ import com.twitter.sdk.android.core.models.Tweet;
 
 import org.lunci.dumbthing.BuildConfig;
 import org.lunci.dumbthing.R;
+import org.lunci.dumbthing.preference.Keys;
 import org.lunci.dumbthing.preference.PreferencesTracker;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -64,35 +70,7 @@ public class AutoShareManager {
     private static final String TAG=AutoShareManager.class.getSimpleName();
     private Activity mActivity;
     private final HashMap<String, IAutoShare> mShareModules=new HashMap<>();
-    
-    private class ShareTask extends AsyncTask<String, Integer, Boolean>{
-        private final Set<String> mModuleSet;
 
-        public ShareTask(Set<String> moduleList){
-            mModuleSet =moduleList;
-        }
-        @Override
-        protected Boolean doInBackground(String... params) {
-            if(params==null || params.length!=1)
-                return false;
-            int progress=0;
-            int length;
-            if(mModuleSet ==null){
-                return false;
-            }else{
-                length= mModuleSet.size();
-                for(String name: mModuleSet){
-                    try {
-                        mShareModules.get(name).post(params[0],mShareCallback);
-                    }catch (NullPointerException ex){
-                        ex.printStackTrace();
-                    }
-                    this.publishProgress(((int) (++progress / (float) length * 100)));
-                }
-            }
-            return true;
-        }
-    }
     
     private HashMap<String, Boolean> mPostSuccessSet=new HashMap<>();
     private Set<String> mPendingPostSet=new HashSet<>();
@@ -133,8 +111,21 @@ public class AutoShareManager {
             mPendingPostSet.add(s);
         }
         mPostSuccessSet.clear();
-        final ShareTask task=new ShareTask(moduleSet);
-        task.execute(content);
+        //int length;
+        if(moduleSet ==null){
+            return;
+        }else{
+           // length= mShareModules.size();
+            for(String name: moduleSet){
+                try {
+                    mShareModules.get(name).post(content,mShareCallback);
+                }catch (NullPointerException ex){
+                    ex.printStackTrace();
+                }
+            }
+        }
+//        final ShareTask task=new ShareTask(moduleSet);
+//        task.execute(content);
     }
 
     private class ShareOnFacebook implements IAutoShare{
@@ -158,7 +149,7 @@ public class AutoShareManager {
             }
             return true;
         }
-        
+
         private Session.StatusCallback mSessionCallback= new Session.StatusCallback() {
             @Override
             public void call(Session session, SessionState sessionState, Exception e) {
@@ -182,7 +173,7 @@ public class AutoShareManager {
                     }
                     postContent(mContent, session);
                 } else {
-                    Log.i(TAG, "Unable to find facebook active session.");
+                    Log.e(TAG, "Unable to find facebook active session.");
                 }
             }
         };
@@ -200,22 +191,52 @@ public class AutoShareManager {
                 if(BuildConfig.DEBUG){
                     Log.i(TAG, "create new session");
                 }
-                mCurrentSession = new Session.Builder(mActivity).build();
-                if(BuildConfig.DEBUG){
-                    Log.i(TAG, "session state="+mCurrentSession.getState());
-                }
-                if (SessionState.CREATED.equals(mCurrentSession.getState())||SessionState.CREATED_TOKEN_LOADED.equals(mCurrentSession.getState())){
-                    Session.setActiveSession(mCurrentSession);
-                    if(BuildConfig.DEBUG){
-                        Log.i(TAG, "open session for publish");
+                try {
+                    final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mActivity);
+                    final String token = pref.getString(Keys.Preference_Facebook_AccessToken, "");
+                    final long expire = pref.getLong(Keys.Preference_Facebook_AccessToken_Expire, 0);
+                    final Date expDate = new Date();
+                    expDate.setTime(expire);
+                    final long lastRefresh = pref.getLong(Keys.Preference_Facebook_Last_Refresh_Date, 0);
+                    final Date lastDate = new Date();
+                    if(lastRefresh==0){
+                        lastDate.setTime(System.currentTimeMillis());
                     }
-                    mCurrentSession.openForPublish(openRequest);
+                    else
+                        lastDate.setTime(lastRefresh);
+                    final Set<String> permissions = pref.getStringSet(Keys.Preference_Facebook_Permissions, null);
+                    final List<String> permissionList = new ArrayList<>();
+                    permissionList.addAll(permissions);
+                    //  final Set<String> declinedPermissions=pref.getStringSet(Keys.Preference_Facebook_Declined_Permissions, null);
+                    final String source = pref.getString(Keys.Preference_Facebook_AccessToken_Source, "");
+                    AccessTokenSource tokenSource;
+                    if(source.isEmpty()){
+                        tokenSource=AccessTokenSource.FACEBOOK_APPLICATION_WEB;
+                    }
+                    else tokenSource = AccessTokenSource.valueOf(source);
+                    final AccessToken accessToken = AccessToken.createFromExistingAccessToken(token, expDate, lastDate, tokenSource, permissionList);
+                    mCurrentSession = Session.openActiveSessionWithAccessToken(mActivity, accessToken, mSessionCallback);
+                    if (BuildConfig.DEBUG) {
+                        Log.i(TAG, "session state=" + mCurrentSession.getState());
+                    }
+                    if (SessionState.CREATED.equals(mCurrentSession.getState()) || SessionState.CREATED_TOKEN_LOADED.equals(mCurrentSession.getState())) {
+                        Session.setActiveSession(mCurrentSession);
+                        if (BuildConfig.DEBUG) {
+                            Log.i(TAG, "open session for publish");
+                        }
+                        mCurrentSession.openForPublish(openRequest);
+                    } else if (SessionState.OPENED.equals(mCurrentSession.getState())) {
+                        postContent(mContent, mCurrentSession);
+                    }
+                }catch (NullPointerException ex){
+                    ex.printStackTrace();
                 }
             }else{
                 if(BuildConfig.DEBUG){
-                    Log.i(TAG, "open session for publish");
+                    Log.i(TAG, "session already opened");
                 }
-                mCurrentSession.openForPublish(openRequest);
+                mSessionCallback.call(mCurrentSession, mCurrentSession.getState(), null);
+               // mCurrentSession.openForPublish(openRequest);
             }
         }
 
@@ -228,6 +249,7 @@ public class AutoShareManager {
                 mCurrentSession.onActivityResult(mActivity, requestCode, resultCode, data);
             else{
                 Log.e(TAG, "mCurrentSession is null");
+
             }
         }
 

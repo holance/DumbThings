@@ -24,6 +24,13 @@ public class Keys {
     public static final String Preference_Facebook_Linked="preference_facebook_linked";
     public static final String Preference_Twitter_Linked="preference_twitter_linked";
     public static final String Preference_Google_Plus_Linked="preference_google_plus_linked";
-    
+
     public static final String Preference_Auto_Sharing_Accounts="preference_auto_sharing_accounts";
+
+    public static final String Preference_Facebook_AccessToken="preference_facebook_accesstoken";
+    public static final String Preference_Facebook_AccessToken_Expire="preference_facebook_accesstoken_expire";
+    public static final String Preference_Facebook_Permissions="preference_facebook_permissions";
+    public static final String Preference_Facebook_Declined_Permissions="preference_facebook_declined_permissions";
+    public static final String Preference_Facebook_Last_Refresh_Date="preference_facebook_last_refresh";
+    public static final String Preference_Facebook_AccessToken_Source="preference_facebook_token_source";
 }
