@@ -170,8 +170,14 @@ public class MainDisplayFragment extends ServiceFragmentBase {
         if(savedInstanceState!=null){
             final int index=savedInstanceState.getInt(EXTRA_CURRENT_INDEX);
             if(index>-1 && index<mAdapter.getCount()){
+                if(BuildConfig.DEBUG){
+                    Log.i(TAG, "restore displayed child="+index);
+                }
                 mViewHolder.setDisplayedChild(index);
             }else {
+                if(BuildConfig.DEBUG){
+                    Log.i(TAG, "restore displayed child to last one");
+                }
                 mViewHolder.setDisplayedChild(mAdapter.getCount() - 1);
             }
         }
@@ -281,6 +287,9 @@ public class MainDisplayFragment extends ServiceFragmentBase {
         }
 
         public boolean showNext() {
+            if(BuildConfig.DEBUG){
+                Log.i(TAG, "showNext");
+            }
             if (!CycleView && mItemSwitcher.getDisplayedChild() >= mItemSwitcher.getCount() - 1) {
                 return false;
             }
@@ -292,6 +301,9 @@ public class MainDisplayFragment extends ServiceFragmentBase {
         }
 
         public boolean showPrevious() {
+            if(BuildConfig.DEBUG){
+                Log.i(TAG, "showPrevious");
+            }
             if (!CycleView && mItemSwitcher.getDisplayedChild() == 0) {
                 return false;
             }
@@ -303,6 +315,9 @@ public class MainDisplayFragment extends ServiceFragmentBase {
         }
 
         public void setDisplayedChild(int position) {
+            if(BuildConfig.DEBUG){
+                Log.i(TAG, "setDisplayedChild="+position);
+            }
             if (position == mItemSwitcher.getDisplayedChild() || position < 0 || position > mItemSwitcher.getCount() - 1) {
                 return;
             } else if (position > mItemSwitcher.getDisplayedChild()) {
@@ -383,11 +398,16 @@ public class MainDisplayFragment extends ServiceFragmentBase {
                 @Override
                 public void onClick(View v) {
                     showNext();
+                    mRightArrow.animate().alpha(0);
+                    mRightArrow.setEnabled(false);
                 }
             });
         }
 
         public void onViewChanged(int position) {
+            if(BuildConfig.DEBUG){
+                Log.i(TAG, "onViewChanged, position="+position);
+            }
             if (position == 0) {
                 mLeftArrow.setEnabled(false);
                 mLeftArrow.animate().alpha(0f).setDuration(300);
