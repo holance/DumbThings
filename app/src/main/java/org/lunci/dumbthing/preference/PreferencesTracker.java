@@ -28,9 +28,9 @@ public class PreferencesTracker implements SharedPreferences.OnSharedPreferenceC
 
     private static PreferencesTracker mInstance;
     private boolean mEnableAutoPrefix = false;
-    private boolean mEnableAutoSuffix = false;
+   // private boolean mEnableAutoSuffix = false;
     private String mPrefix;
-    private String mSuffix;
+   // private String mSuffix;
     private boolean mEnableAutoShare=true;
 
     public boolean isFacebookLinked() {
@@ -117,9 +117,9 @@ public class PreferencesTracker implements SharedPreferences.OnSharedPreferenceC
         return mEnableAutoPrefix;
     }
 
-    public boolean isEnableAutoSuffix() {
-        return mEnableAutoSuffix;
-    }
+//    public boolean isEnableAutoSuffix() {
+//        return mEnableAutoSuffix;
+//    }
 
     public boolean isEnableAutoShare(){return mEnableAutoShare;}
 
@@ -127,9 +127,9 @@ public class PreferencesTracker implements SharedPreferences.OnSharedPreferenceC
         return mPrefix;
     }
 
-    public String getSuffix() {
-        return mSuffix;
-    }
+//    public String getSuffix() {
+//        return mSuffix;
+//    }
 
     private void init(SharedPreferences sharedPreferences) {
         if (sharedPreferences.contains(Keys.Preference_Default_Prefix)) {
@@ -140,13 +140,13 @@ public class PreferencesTracker implements SharedPreferences.OnSharedPreferenceC
             sharedPreferences.edit().putString(Keys.Preference_Default_Prefix, mPrefix).commit();
         }
 
-        if (sharedPreferences.contains(Keys.Preference_Default_Suffix)) {
-            mSuffix = sharedPreferences.getString(Keys.Preference_Default_Suffix,
-                    DumbThingsApp.getContext().getString(R.string.default_tail));
-        } else {
-            mSuffix = DumbThingsApp.getContext().getString(R.string.default_tail);
-            sharedPreferences.edit().putString(Keys.Preference_Default_Suffix, mSuffix).commit();
-        }
+//        if (sharedPreferences.contains(Keys.Preference_Default_Suffix)) {
+//            mSuffix = sharedPreferences.getString(Keys.Preference_Default_Suffix,
+//                    DumbThingsApp.getContext().getString(R.string.default_tail));
+//        } else {
+//            mSuffix = DumbThingsApp.getContext().getString(R.string.default_tail);
+//            sharedPreferences.edit().putString(Keys.Preference_Default_Suffix, mSuffix).commit();
+//        }
 
         if (sharedPreferences.contains(Keys.Preference_Enable_Prefix)) {
             mEnableAutoPrefix = sharedPreferences.getBoolean(Keys.Preference_Enable_Prefix, false);
@@ -154,11 +154,11 @@ public class PreferencesTracker implements SharedPreferences.OnSharedPreferenceC
             sharedPreferences.edit().putBoolean(Keys.Preference_Enable_Prefix, mEnableAutoPrefix).commit();
         }
 
-        if (sharedPreferences.contains(Keys.Preference_Enable_Suffix)) {
-            mEnableAutoSuffix = sharedPreferences.getBoolean(Keys.Preference_Enable_Suffix, false);
-        } else {
-            sharedPreferences.edit().putBoolean(Keys.Preference_Enable_Suffix, mEnableAutoSuffix).commit();
-        }
+//        if (sharedPreferences.contains(Keys.Preference_Enable_Suffix)) {
+//            mEnableAutoSuffix = sharedPreferences.getBoolean(Keys.Preference_Enable_Suffix, false);
+//        } else {
+//            sharedPreferences.edit().putBoolean(Keys.Preference_Enable_Suffix, mEnableAutoSuffix).commit();
+//        }
 
         if (sharedPreferences.contains(Keys.Preference_Enable_Auto_Share)) {
             mEnableAutoShare = sharedPreferences.getBoolean(Keys.Preference_Enable_Auto_Share, false);
@@ -180,13 +180,13 @@ public class PreferencesTracker implements SharedPreferences.OnSharedPreferenceC
         if (key.equals(Keys.Preference_Default_Prefix)) {
             mPrefix = sharedPreferences.getString(Keys.Preference_Default_Prefix,
                     DumbThingsApp.getContext().getString(R.string.default_sentence));
-        } else if (key.equals(Keys.Preference_Default_Suffix)) {
-            mSuffix = sharedPreferences.getString(Keys.Preference_Default_Suffix,
-                    DumbThingsApp.getContext().getString(R.string.default_tail));
+//        } else if (key.equals(Keys.Preference_Default_Suffix)) {
+//            mSuffix = sharedPreferences.getString(Keys.Preference_Default_Suffix,
+//                    DumbThingsApp.getContext().getString(R.string.default_tail));
         } else if (key.equals(Keys.Preference_Enable_Prefix)) {
             mEnableAutoPrefix = sharedPreferences.getBoolean(Keys.Preference_Enable_Prefix, false);
-        } else if (key.equals(Keys.Preference_Enable_Suffix)) {
-            mEnableAutoSuffix = sharedPreferences.getBoolean(Keys.Preference_Enable_Suffix, false);
+//        } else if (key.equals(Keys.Preference_Enable_Suffix)) {
+//            mEnableAutoSuffix = sharedPreferences.getBoolean(Keys.Preference_Enable_Suffix, false);
         }else if(key.equals(Keys.Preference_Enable_Auto_Share)){
             mEnableAutoShare=sharedPreferences.getBoolean(Keys.Preference_Enable_Auto_Share, false);
         }else if(key.equals(Keys.Preference_Facebook_Linked)){

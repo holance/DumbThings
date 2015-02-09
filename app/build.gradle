@@ -18,13 +18,13 @@ android {
         applicationId "org.lunci.dumbthing"
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 3
-        versionName "1.0"
+        versionCode 4
+        versionName "1.1"
     }
     buildTypes {
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'),'proguard-rules.pro','proguard-com.twitter.sdk.android.twitter.txt'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),'proguard-rules.pro','../proguard-com.twitter.sdk.android.twitter.txt'
         }
         debug {
 //            buildConfigField "boolean", "USE_CRASHLYTICS", "false"

@@ -16,8 +16,6 @@
             android:title="@string/preference_enable_auto_share"
             android:summary="@string/preference_enable_auto_share_summary"
             android:defaultValue="true" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="@string/share">
         <CheckBoxPreference
             android:key="preference_enable_prefix"
             android:title="@string/preference_enable_prefix"
@@ -33,23 +31,40 @@
             android:capitalize="words"
             android:singleLine="true"
             android:maxLines="1" />
-
-        <CheckBoxPreference
-            android:key="preference_enable_suffix"
-            android:title="@string/preference_enable_suffix"
-            android:summary="@string/preference_enable_suffix_summary"
-            android:defaultValue="true" />
-
-        <EditTextPreference
-            android:key="preference_default_suffix"
-            android:title="@string/preference_default_suffix"
-            android:defaultValue="@string/default_tail"
-            android:selectAllOnFocus="true"
-            android:inputType="textCapWords"
-            android:capitalize="words"
-            android:singleLine="true"
-            android:maxLines="1" />
     </PreferenceCategory>
+    <!--<PreferenceCategory android:title="@string/share">-->
+        <!--<CheckBoxPreference-->
+            <!--android:key="preference_enable_prefix"-->
+            <!--android:title="@string/preference_enable_prefix"-->
+            <!--android:summary="@string/preference_enable_prefix_summary"-->
+            <!--android:defaultValue="true" />-->
+
+        <!--<EditTextPreference-->
+            <!--android:key="preference_default_prefix"-->
+            <!--android:title="@string/preference_default_prefix"-->
+            <!--android:defaultValue="@string/default_sentence"-->
+            <!--android:selectAllOnFocus="true"-->
+            <!--android:inputType="textCapWords"-->
+            <!--android:capitalize="words"-->
+            <!--android:singleLine="true"-->
+            <!--android:maxLines="1" />-->
+
+        <!--&lt;!&ndash;<CheckBoxPreference&ndash;&gt;-->
+            <!--&lt;!&ndash;android:key="preference_enable_suffix"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:title="@string/preference_enable_suffix"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:summary="@string/preference_enable_suffix_summary"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:defaultValue="true" />&ndash;&gt;-->
+
+        <!--&lt;!&ndash;<EditTextPreference&ndash;&gt;-->
+            <!--&lt;!&ndash;android:key="preference_default_suffix"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:title="@string/preference_default_suffix"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:defaultValue="@string/default_tail"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:selectAllOnFocus="true"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:inputType="textCapWords"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:capitalize="words"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:singleLine="true"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:maxLines="1" />&ndash;&gt;-->
+    <!--</PreferenceCategory>-->
     <PreferenceCategory android:title="@string/auto_share">
         <MultiSelectListPreference
             android:dialogTitle="@string/auto_sharing_on_accounts"

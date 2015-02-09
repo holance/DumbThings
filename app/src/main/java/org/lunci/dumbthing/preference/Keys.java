@@ -17,8 +17,8 @@ package org.lunci.dumbthing.preference;
 public class Keys {
     public static final String Preference_Default_Prefix="preference_default_prefix";
     public static final String Preference_Enable_Prefix="preference_enable_prefix";
-    public static final String Preference_Default_Suffix="preference_default_suffix";
-    public static final String Preference_Enable_Suffix="preference_enable_suffix";
+//    public static final String Preference_Default_Suffix="preference_default_suffix";
+//    public static final String Preference_Enable_Suffix="preference_enable_suffix";
     public static final String Preference_Enable_Auto_Share="preference_enable_auto_share_pop";
 
     public static final String Preference_Facebook_Linked="preference_facebook_linked";

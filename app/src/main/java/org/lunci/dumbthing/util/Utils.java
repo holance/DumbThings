@@ -102,16 +102,16 @@ public class Utils {
     }
 
     public static String buildDumbContent(String orgContent){
-        final PreferencesTracker pref=PreferencesTracker.getInstance();
-        if(pref.isEnableAutoPrefix()){
-            orgContent= pref.getPrefix()+" "+orgContent;
-        }
-        if(pref.isEnableAutoSuffix()){
-           orgContent= orgContent+" "+pref.getSuffix();
-        }
-        if(BuildConfig.DEBUG){
-            Log.i(TAG, "content="+orgContent);
-        }
+//        final PreferencesTracker pref=PreferencesTracker.getInstance();
+//        if(pref.isEnableAutoPrefix()){
+//            orgContent= pref.getPrefix()+" "+orgContent;
+//        }
+//        if(pref.isEnableAutoSuffix()){
+//           orgContent= orgContent+" "+pref.getSuffix();
+//        }
+//        if(BuildConfig.DEBUG){
+//            Log.i(TAG, "content="+orgContent);
+//        }
         return orgContent;
     }
 

@@ -29,6 +29,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import org.lunci.dumbthing.R;
+import org.lunci.dumbthing.preference.PreferencesTracker;
 
 import de.greenrobot.event.EventBus;
 
@@ -61,6 +62,9 @@ public class AddDumbThingDialog extends DialogFragment{
         mEditText=(EditText)view.findViewById(R.id.editText_content);
         if(savedInstanceState!=null){
             mEditText.setText(savedInstanceState.getString(EXTRA_CONTENT));
+        }else if(PreferencesTracker.getInstance().isEnableAutoPrefix()){
+            mEditText.setText("");
+            mEditText.append(PreferencesTracker.getInstance().getPrefix());
         }
         mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
