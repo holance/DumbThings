@@ -146,4 +146,16 @@ public class MainActivity extends ActionBarActivity {
             mAutoShareManager.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState){
+        super.onRestoreInstanceState(savedInstanceState);
+        mAutoShareManager.onRestoreInstanceState(savedInstanceState);
+    }
+    
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        mAutoShareManager.onSaveInstanceState(outState);
+    }
 }

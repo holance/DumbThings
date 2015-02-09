@@ -34,6 +34,7 @@ import org.lunci.dumbthing.account.LinkButtonContainer;
 import org.lunci.dumbthing.account.LinkFacebook;
 import org.lunci.dumbthing.account.LinkTwitter;
 import org.lunci.dumbthing.preference.PreferencesTracker;
+import org.lunci.dumbthing.util.Utils;
 
 
 /**
@@ -180,6 +181,9 @@ public class LinkShareDialog extends DialogFragment {
             public void onClick(View v) {
                 if (v.getTag() == null) {
                     Log.e(TAG, "Link button tag is null");
+                    return;
+                }else if(!Utils.checkNetworkConnection()){
+                    Toast.makeText(getActivity(), R.string.network_not_available, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 final int tag = (int) v.getTag();

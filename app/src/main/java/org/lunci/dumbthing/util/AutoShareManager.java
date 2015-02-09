@@ -176,7 +176,7 @@ public class AutoShareManager {
                     List<String> permissions = session.getPermissions();
                     if (!isSubsetOf(PERMISSIONS, permissions)) {
                         Log.w(TAG, "Permission denied. Please relink facebook.");
-                        Toast toast = Toast.makeText(mActivity, R.string.send_to_facebook_failed, Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(mActivity, R.string.send_to_facebook_permssion_failed, Toast.LENGTH_SHORT);
                         toast.show();
                         return;
                     }
@@ -292,23 +292,7 @@ public class AutoShareManager {
              //   Twitter.logIn(mActivity, mCallback);
             }
         }
-//
-//        private com.twitter.sdk.android.core.Callback<TwitterSession> mCallback=new com.twitter.sdk.android.core.Callback<TwitterSession>(){
-//
-//            @Override
-//            public void success(Result result) {
-//                mCurrentSession=(TwitterSession)result.data;
-//                postContent();
-//            }
-//
-//            @Override
-//            public void failure(TwitterException e) {
-//                Log.w(TAG, "Log into twitter failed:"+e.getMessage());
-//                final Toast toast=Toast.makeText(mActivity, R.string.send_to_twitter_failed, Toast.LENGTH_SHORT);
-//                toast.show();
-//            }
-//        };
-        
+
         private void postContent(){
             Twitter.getInstance().core.getApiClient().getStatusesService()
                     .update(mContent, null, null, null, null, null, null, null,new com.twitter.sdk.android.core.Callback<Tweet>(){
@@ -354,6 +338,24 @@ public class AutoShareManager {
         }
         for(IAutoShare module:mShareModules.values()){
             module.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+    
+    public void onRestoreInstanceState(Bundle inState){
+        Session.restoreSession(mActivity, null, new Session.StatusCallback() {
+            @Override
+            public void call(Session session, SessionState sessionState, Exception e) {
+                if (e!=null) {
+                    Log.i(TAG, "Exception:"+e.getMessage());
+                }
+            }
+        }, inState);
+    }
+    
+    public void onSaveInstanceState(Bundle outState){
+        if(Session.getActiveSession()!=null){
+            Session session = Session.getActiveSession();
+            Session.saveSession(session, outState);
         }
     }
 }

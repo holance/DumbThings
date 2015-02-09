@@ -74,7 +74,9 @@
     <string name="google_plus">Google Plus</string>
     <!--Error messages-->
     <string name="send_to_facebook_failed">Post on facebook failed. Please relink facebook.</string>
+    <string name="send_to_facebook_permssion_failed">Facebook permission denied. Please relink facebook.</string>
     <string name="send_to_twitter_failed">Post on twitter failed. Please relink twitter.</string>
+    <string name="network_not_available">Network connection is not available.</string>
     
     <!--Alert Info-->
     <string name="share_to_linked_accounts">Post to linked accounts?</string>

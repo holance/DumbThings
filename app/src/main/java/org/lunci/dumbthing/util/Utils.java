@@ -15,12 +15,15 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 import android.widget.Toast;
 
 import org.lunci.dumbthing.BuildConfig;
 import org.lunci.dumbthing.R;
 import org.lunci.dumbthing.activity.SettingsActivity;
+import org.lunci.dumbthing.app.DumbThingsApp;
 import org.lunci.dumbthing.dataModel.GlobalMessages;
 import org.lunci.dumbthing.preference.PreferencesTracker;
 
@@ -56,6 +59,10 @@ public class Utils {
     }
 
     public static void autoShareText(final Context context, final String text){
+        if(!checkNetworkConnection()){
+            Toast.makeText(context, R.string.network_not_available, Toast.LENGTH_SHORT).show();
+            return;
+        }
         final PreferencesTracker pref=PreferencesTracker.getInstance();
         if(!pref.isGooglePlusLinked() && !pref.isFacebookLinked() && !pref.isTwitterLinked()){
             Toast.makeText(context, R.string.please_link_at_least_one, Toast.LENGTH_SHORT).show();
@@ -111,5 +118,15 @@ public class Utils {
     public static void startSettingActivity(Context context){
         final Intent intent=new Intent(context, SettingsActivity.class);
         context.startActivity(intent);
+    }
+    
+    public static boolean checkNetworkConnection(){
+        final Context context= DumbThingsApp.getContext();
+        ConnectivityManager cm =
+                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
     }
 }
