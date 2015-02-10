@@ -93,23 +93,29 @@ public class LinkFacebook extends LinkAccountBase {
             public void onClick(DialogInterface dialog, int which) {
                 final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
                 try {
-                    final String token = pref.getString(Keys.Preference_Facebook_AccessToken, "");
-                    final long expire = pref.getLong(Keys.Preference_Facebook_AccessToken_Expire, 0);
-                    final Date expDate = new Date();
-                    expDate.setTime(expire);
-                    final long lastRefresh = pref.getLong(Keys.Preference_Facebook_Last_Refresh_Date, 0);
-                    final Date lastDate = new Date();
-                    lastDate.setTime(lastRefresh);
-                    final Set<String> permissions = pref.getStringSet(Keys.Preference_Facebook_Permissions, null);
-                    final List<String> permissionList = new ArrayList<>();
-                    permissionList.addAll(permissions);
-                    //  final Set<String> declinedPermissions=pref.getStringSet(Keys.Preference_Facebook_Declined_Permissions, null);
-                    final String source = pref.getString(Keys.Preference_Facebook_AccessToken_Source, "");
-                    final AccessTokenSource tokenSource = AccessTokenSource.valueOf(source);
-                    final AccessToken accessToken = AccessToken.createFromExistingAccessToken(token, expDate, lastDate, tokenSource, permissionList);
-                    final Session session = Session.openActiveSessionWithAccessToken(getActivity(), accessToken, null);
+                    Session session=Session.getActiveSession();
+                    if(session==null) {
+                        final String token = pref.getString(Keys.Preference_Facebook_AccessToken, "");
+                        final long expire = pref.getLong(Keys.Preference_Facebook_AccessToken_Expire, 0);
+                        final Date expDate = new Date();
+                        expDate.setTime(expire);
+                        final long lastRefresh = pref.getLong(Keys.Preference_Facebook_Last_Refresh_Date, 0);
+                        final Date lastDate = new Date();
+                        lastDate.setTime(lastRefresh);
+                        final Set<String> permissions = pref.getStringSet(Keys.Preference_Facebook_Permissions, null);
+                        final List<String> permissionList = new ArrayList<>();
+                        permissionList.addAll(permissions);
+                        //  final Set<String> declinedPermissions=pref.getStringSet(Keys.Preference_Facebook_Declined_Permissions, null);
+                        final String source = pref.getString(Keys.Preference_Facebook_AccessToken_Source, "");
+                        final AccessTokenSource tokenSource = AccessTokenSource.valueOf(source);
+                        final AccessToken accessToken = AccessToken.createFromExistingAccessToken(token, expDate, lastDate, tokenSource, permissionList);
+                        session = Session.openActiveSessionWithAccessToken(getActivity(), accessToken, null);
+                    }
                     if (session != null)
                         session.closeAndClearTokenInformation();
+                    else{
+                        Log.w(TAG, "Unable to retrieve session");
+                    }
                 }catch (NullPointerException ex){
                     ex.printStackTrace();
                 }finally {

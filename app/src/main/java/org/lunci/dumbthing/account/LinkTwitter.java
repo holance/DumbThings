@@ -23,7 +23,7 @@ import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
-import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
 import org.lunci.dumbthing.BuildConfig;
 import org.lunci.dumbthing.R;
@@ -37,7 +37,7 @@ public class LinkTwitter extends LinkAccountBase {
     private static final String TAG=LinkTwitter.class.getSimpleName();
 
     private LinkButtonContainer mButtonContainer;
-
+    private TwitterAuthClient mClient;
     public LinkTwitter(Activity activity, LinkAccoutCallbacks callbacks){
         super(activity, callbacks);
     }
@@ -62,25 +62,26 @@ public class LinkTwitter extends LinkAccountBase {
         if(BuildConfig.DEBUG){
             Log.i(TAG, "link twitter");
         }
-        final TwitterLoginButton loginButton=new TwitterLoginButton(getActivity());
-        mButtonContainer.setLoginButton(loginButton);
-        loginButton.setCallback(new Callback<TwitterSession>() {
-            @Override
-            public void success(Result<TwitterSession> twitterSessionResult) {
-                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean(Keys.Preference_Twitter_Linked,true).commit();
-                mButtonContainer.updateLinked(true);
-                mCallbacks.onLinked(true, R.string.link_twitter_succeed);
-            }
-
-            @Override
-            public void failure(TwitterException e) {
-                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean(Keys.Preference_Twitter_Linked,false).commit();
-                mButtonContainer.updateLinked(false);
-                mCallbacks.onLinked(false, R.string.link_twitter_failed);
-            }
-        });
-        loginButton.performClick();
+        mClient = new TwitterAuthClient();
+        mClient.authorize(getActivity(),mCallback);
     }
+    
+    private Callback<TwitterSession> mCallback = new Callback<TwitterSession>(){
+
+        @Override
+        public void success(Result<TwitterSession> twitterSessionResult) {
+            PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean(Keys.Preference_Twitter_Linked,true).commit();
+            mButtonContainer.updateLinked(true);
+            mCallbacks.onLinked(true, R.string.link_twitter_succeed);
+        }
+
+        @Override
+        public void failure(TwitterException e) {
+            PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean(Keys.Preference_Twitter_Linked,false).commit();
+            mButtonContainer.updateLinked(false);
+            mCallbacks.onLinked(false, R.string.link_twitter_failed);
+        }
+    };
 
     @Override
     public void unlink() {
@@ -101,7 +102,7 @@ public class LinkTwitter extends LinkAccountBase {
     @Override
     public void onLinkResult(int requestCode, int resultCode, Intent data) {
         try {
-            ((TwitterLoginButton) mButtonContainer.getLoginButton()).onActivityResult(requestCode, resultCode, data);
+            mClient.onActivityResult(requestCode, resultCode, data);
         }catch (NullPointerException ex){
             ex.printStackTrace();
         }

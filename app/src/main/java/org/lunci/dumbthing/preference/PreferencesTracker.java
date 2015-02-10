@@ -126,6 +126,10 @@ public class PreferencesTracker implements SharedPreferences.OnSharedPreferenceC
     public String getPrefix() {
         return mPrefix;
     }
+    
+    public boolean isAutoSharingAccountExists(){
+        return isFacebookLinked()||isTwitterLinked()||isGooglePlusLinked();
+    }
 
 //    public String getSuffix() {
 //        return mSuffix;
@@ -192,9 +196,9 @@ public class PreferencesTracker implements SharedPreferences.OnSharedPreferenceC
         }else if(key.equals(Keys.Preference_Facebook_Linked)){
             mFacebookLinked=sharedPreferences.getBoolean(Keys.Preference_Facebook_Linked, false);
         }else if(key.equals(Keys.Preference_Google_Plus_Linked)){
-            mFacebookLinked=sharedPreferences.getBoolean(Keys.Preference_Google_Plus_Linked, false);
+            mGooglePlusLinked=sharedPreferences.getBoolean(Keys.Preference_Google_Plus_Linked, false);
         }else if(key.equals(Keys.Preference_Twitter_Linked)){
-            mFacebookLinked=sharedPreferences.getBoolean(Keys.Preference_Twitter_Linked, false);
+            mTwitterLinked=sharedPreferences.getBoolean(Keys.Preference_Twitter_Linked, false);
         }else if(key.equals(Keys.Preference_Auto_Sharing_Accounts)){
             mAutoSharingAccounts=sharedPreferences.getStringSet(Keys.Preference_Auto_Sharing_Accounts, mAutoSharingAccounts);
         }

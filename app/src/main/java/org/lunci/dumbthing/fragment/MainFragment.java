@@ -70,7 +70,14 @@ public class MainFragment extends ServiceFragmentBase {
                                 mHandler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Utils.autoShareText(getActivity(), model.getContent());
+                                        if(PreferencesTracker.getInstance().isAutoSharingAccountExists())
+                                        {
+                                            Utils.autoShareText(getActivity(), model.getContent());
+                                        }
+                                        else
+                                        {
+                                            Utils.shareText(getActivity(), model.getContent());
+                                        }
                                     }
                                 });
                                 succ = true;
