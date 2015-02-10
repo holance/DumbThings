@@ -26,12 +26,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterViewFlipper;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.lunci.dumbthing.BuildConfig;
 import org.lunci.dumbthing.R;
 import org.lunci.dumbthing.adapter.DumbItemSimpleAdapter;
 import org.lunci.dumbthing.dataModel.DumbModel;
 import org.lunci.dumbthing.dataModel.GlobalMessages;
+import org.lunci.dumbthing.dialog.LinkShareDialog;
+import org.lunci.dumbthing.preference.PreferencesTracker;
 import org.lunci.dumbthing.service.DataServiceMessages;
 import org.lunci.dumbthing.util.Utils;
 
@@ -363,20 +366,30 @@ public class MainDisplayFragment extends ServiceFragmentBase {
             mAutoShareButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(mAdapter.getCount()==0){
+                        Toast toast= Toast.makeText(getActivity(), R.string.please_add_dumbthing_first, Toast.LENGTH_SHORT);
+                        toast.show();
+                        return;
+                    }
                     final int index = mItemSwitcher.getDisplayedChild();
                     final DumbModel model = mAdapter.getItem(index);
                     mShareButton.setEnabled(false);
-                    mHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Utils.autoShareText(getActivity(), Utils.buildDumbContent(model.getContent()));
-                                mShareButton.setEnabled(true);
-                            } catch (IndexOutOfBoundsException ex) {
-                                ex.printStackTrace();
+                    if(PreferencesTracker.getInstance().isAutoSharingAccountExists()) {
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Utils.autoShareText(getActivity(), Utils.buildDumbContent(model.getContent()));
+                                    mShareButton.setEnabled(true);
+                                } catch (IndexOutOfBoundsException ex) {
+                                    ex.printStackTrace();
+                                }
                             }
-                        }
-                    }, 300);
+                        }, 300);
+                    }else{
+                        final LinkShareDialog dialog=new LinkShareDialog();
+                        dialog.show(getFragmentManager(), LinkShareDialog.class.getSimpleName());
+                    }
                 }
             });
 

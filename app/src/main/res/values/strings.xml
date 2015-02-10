@@ -83,4 +83,5 @@
     <string name="share_to_linked_accounts_succeeded">Successfully post to all accounts!</string>
     <string name="please_link_at_least_one">Please link at least one account to use auto sharing.</string>
     <string name="please_set_at_least_one">Please enable at least one account in setting to use auto sharing.</string>
+    <string name="please_add_dumbthing_first">Please add a dumb thing first.</string>
 </resources>
