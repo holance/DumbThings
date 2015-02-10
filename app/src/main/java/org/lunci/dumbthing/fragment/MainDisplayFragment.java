@@ -398,10 +398,10 @@ public class MainDisplayFragment extends ServiceFragmentBase {
                 @Override
                 public void onClick(View v) {
                     showNext();
-                    mRightArrow.animate().alpha(0);
-                    mRightArrow.setEnabled(false);
                 }
             });
+            mRightArrow.animate().alpha(0);
+            mRightArrow.setEnabled(false);
         }
 
         public void onViewChanged(int position) {
