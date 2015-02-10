@@ -31,11 +31,9 @@
         android:layout_height="match_parent">
         <View
             android:id="@+id/imageView_slide_indicator"
-            android:background="@color/deep_orange_500"
-            android:layout_width="2dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
+            android:background="@drawable/ic_right"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true" />
         <LinearLayout
